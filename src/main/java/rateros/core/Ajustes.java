@@ -45,6 +45,8 @@ public final class Ajustes {
      * materials (in your inventory, your ender chest or the containers around you).
      */
     public static List<Nivel> niveles = nivelesDefecto();
+    /** % of gangs that come from a random lower level instead of yours (for some variety). */
+    public static int probMenor = 30;
 
     /**
      * One gang level. tamano "3-4"; weapons by material (madera, piedra, hierro, diamante, netherita):
@@ -247,6 +249,7 @@ public final class Ajustes {
         j.addProperty("rolBallestero", rolBallestero);
         j.addProperty("rolForzador", rolForzador);
         j.addProperty("rolJefe", rolJefe);
+        j.addProperty("probMenor", probMenor);
         JsonArray ns = new JsonArray();
         niveles.forEach(n -> ns.add(n.aJson()));
         j.add("niveles", ns);
@@ -317,6 +320,7 @@ public final class Ajustes {
         rolBallestero = bool(j, "rolBallestero", rolBallestero);
         rolForzador = bool(j, "rolForzador", rolForzador);
         rolJefe = bool(j, "rolJefe", rolJefe);
+        probMenor = entero(j, "probMenor", probMenor, 0, 100);
         if (j.has("niveles") && j.get("niveles").isJsonArray()) {
             List<Nivel> def = nivelesDefecto();
             List<Nivel> r = new ArrayList<>();

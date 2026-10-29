@@ -179,6 +179,8 @@ public class PantallaAjustes extends Screen {
                 interruptor(1, x + 2 * (wr + 2), wr, "rolForzador", "rateros.rolcorto.forzador");
                 interruptor(1, x + 3 * (wr + 2), wr, "rolJefe", "rateros.rolcorto.jefe");
                 etiqueta(2, "rateros.aj.tuNivel");
+                etiqueta(3, "rateros.aj.probMenor");
+                numero(3, x, 50, "probMenor", 30, 1, true);
                 addRenderableWidget(Button.builder(Component.translatable("rateros.pantalla.carpeta"), b -> abrirCarpeta())
                         .bounds(izq, height - 56, der - izq, 20).build());
             }
@@ -242,7 +244,7 @@ public class PantallaAjustes extends Screen {
             case BANDA -> {
                 String nombre = texto("_nivel", "nada");
                 g.text(font, Component.translatableWithFallback("rateros.etapa." + nombre, nombre).withStyle(ChatFormatting.YELLOW), x, fila(2) + 6, -1);
-                g.textWithWordWrap(font, gris.apply("rateros.aj.niveles_ayuda"), izq, fila(3) + 6, der - izq, -1);
+                g.textWithWordWrap(font, gris.apply("rateros.aj.niveles_ayuda"), izq, fila(4) + 6, der - izq, -1);
             }
             case HURTO -> {
                 g.textWithWordWrap(font, gris.apply("rateros.aj.hurto_ayuda"), izq, fila(5) + 2, der - izq, -1);

@@ -4,7 +4,7 @@ Bandas de **rateros** que buscan y roban tus **cosas ya trabajadas**: lingotes, 
 
 ## ⬇️ Descargar
 
-**[Descargar el mod (.jar)](https://github.com/javieraguirre83/rateros/releases/download/ultima/Rateros-1.1.0-forge-26.2.jar)**
+**[Descargar el mod (.jar)](https://github.com/javieraguirre83/rateros/releases/download/ultima/Rateros-1.1.1-forge-26.2.jar)**
 
 1. Descarga el archivo `.jar`.
 2. Abre la carpeta `mods`:
@@ -36,6 +36,7 @@ El tamaño de la banda y sus armas dependen del **material más valioso que haya
 | Diamante | 4 a 6 | + puede venir el jefe | Hierro, a veces diamante |
 | Netherita | 5 a 8 | + jefe siempre | Diamante, a veces netherita |
 
+- **De vez en cuando llega una banda más chica:** el **30%** de las veces, en lugar de la de tu nivel llega una de cualquier nivel más bajo (al azar). Así, aunque ya tengas diamante, a veces te caen 2 ladrones. Se cambia con `probMenor`.
 - **Nunca traen armas encantadas.**
 - Con `/rateros` ves en qué nivel vas.
 - La tabla se puede cambiar en el archivo de ajustes (ver abajo).
@@ -82,7 +83,7 @@ El tamaño de la banda y sus armas dependen del **material más valioso que haya
 Presiona **Z** en el juego. Se cambia en **Opciones → Controles → Asignación de teclas → Rateros**. Tiene 4 pestañas y **cada cambio se guarda solo**:
 
 - **General:** activar o desactivar, horario, cuánto más probable de noche, % de banda por día (inicio y avanzado), día de mundo avanzado, aviso, si roban en aldeas. Abajo: **Restaurar valores originales** (deja el interruptor de asaltos como esté).
-- **La banda:** máximo de rateros, qué roles pueden venir y **en qué nivel vas**.
+- **La banda:** máximo de rateros, qué roles pueden venir, **en qué nivel vas** y el % de bandas de nivel menor.
 - **El robo:** nivel de hurto, cuánto carga cada rol, % de ir por lo valioso de cada rol, ventaja en bloques para escapar y radio en el que olfatean.
 - **Cómo entran:** si rompen bloques y cuánto tardan. Abajo: **Abrir carpeta de ajustes** y **Recargar archivo**.
 

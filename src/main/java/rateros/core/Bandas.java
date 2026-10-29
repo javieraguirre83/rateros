@@ -108,7 +108,10 @@ public final class Bandas {
         ServerLevel level = player.level();
         RandomSource r = level.getRandom();
         Niveles.actualizar(player);
-        Ajustes.Nivel nivel = Niveles.datos(player);
+        int indice = Niveles.nivel(player);
+        // Now and then a gang of a lower level comes instead (any of them, equally likely)
+        if (indice > 0 && r.nextInt(100) < Ajustes.probMenor) indice = r.nextInt(indice);
+        Ajustes.Nivel nivel = Ajustes.niveles.get(indice);
         int n = size > 0 ? Math.min(size, 32) : tamano(nivel, r);
         BlockPos donde = lugar(level, player.blockPosition(), r);
         if (donde == null) return 0;
