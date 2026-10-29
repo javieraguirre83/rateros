@@ -39,15 +39,63 @@ public final class Ajustes {
 
     // ---------- the gang ----------
     public static int maxBanda = 8;
-    public static String tamInicio = "2-3";
-    public static String tamMedio = "3-5";
-    public static String tamAvanzado = "4-8";
-    public static int diaMedio = 11;
-    public static int diaGrande = 31;
     public static boolean rolLadron = true, rolBallestero = true, rolForzador = true, rolJefe = true;
-    public static boolean mejorarArmas = true;
-    public static boolean permitirDiamante = true;
-    public static boolean permitirEncantamientos = true;
+    /**
+     * Gang levels, from the lowest. A level is unlocked for good the first time you have one of its
+     * materials (in your inventory, your ender chest or the containers around you).
+     */
+    public static List<Nivel> niveles = nivelesDefecto();
+
+    /**
+     * One gang level. tamano "3-4"; weapons by material (madera, piedra, hierro, diamante, netherita):
+     * armaBase, or armaMejor with probMejor %; how many crossbowmen; whether a forcer comes; % chance of a boss.
+     */
+    public record Nivel(String nombre, List<String> materiales, String tamano, String armaBase, String armaMejor,
+                        int probMejor, int ballesteros, boolean forzador, int jefe) {
+        JsonObject aJson() {
+            JsonObject j = new JsonObject();
+            j.addProperty("nombre", nombre);
+            j.add("materiales", lista(materiales));
+            j.addProperty("tamano", tamano);
+            j.addProperty("armaBase", armaBase);
+            j.addProperty("armaMejor", armaMejor);
+            j.addProperty("probMejor", probMejor);
+            j.addProperty("ballesteros", ballesteros);
+            j.addProperty("forzador", forzador);
+            j.addProperty("jefe", jefe);
+            return j;
+        }
+
+        static Nivel leer(JsonObject j, Nivel d) {
+            return new Nivel(texto(j, "nombre", d.nombre), leerLista(j, "materiales", d.materiales),
+                    texto(j, "tamano", d.tamano), leerArma(texto(j, "armaBase", d.armaBase)),
+                    leerArma(texto(j, "armaMejor", d.armaMejor)), entero(j, "probMejor", d.probMejor, 0, 100),
+                    entero(j, "ballesteros", d.ballesteros, 0, 32), bool(j, "forzador", d.forzador),
+                    entero(j, "jefe", d.jefe, 0, 100));
+        }
+    }
+
+    public static List<Nivel> nivelesDefecto() {
+        return new ArrayList<>(List.of(
+                new Nivel("nada", List.of(), "2", "madera", "piedra", 50, 0, false, 0),
+                new Nivel("hierro", List.of("minecraft:iron_ingot", "minecraft:iron_block", "minecraft:lapis_lazuli", "minecraft:lapis_block"),
+                        "2-3", "piedra", "hierro", 25, 1, false, 0),
+                new Nivel("oro", List.of("minecraft:gold_ingot", "minecraft:gold_block", "minecraft:emerald", "minecraft:emerald_block",
+                        "minecraft:redstone", "minecraft:redstone_block"), "3-4", "hierro", "hierro", 0, 1, true, 0),
+                new Nivel("diamante", List.of("minecraft:diamond", "minecraft:diamond_block"), "4-6", "hierro", "diamante", 20, 1, true, 50),
+                new Nivel("netherita", List.of("minecraft:netherite_ingot", "minecraft:netherite_block"), "5-8", "diamante", "netherita", 20, 2, true, 100)));
+    }
+
+    public static String leerArma(String texto) {
+        String t = texto == null ? "" : texto.toLowerCase(Locale.ROOT);
+        return switch (t) {
+            case "madera", "wood", "wooden" -> "madera";
+            case "hierro", "iron" -> "hierro";
+            case "diamante", "diamond" -> "diamante";
+            case "netherita", "netherite" -> "netherita";
+            default -> "piedra";
+        };
+    }
 
     // ---------- the theft ----------
     /** "suave", "normal", "agresivo" or "despiadado". */
@@ -66,10 +114,8 @@ public final class Ajustes {
             "minecraft:cobblestone", "minecraft:cobbled_deepslate", "minecraft:netherrack", "minecraft:tuff",
             "minecraft:diorite", "minecraft:andesite", "minecraft:granite", "minecraft:rotten_flesh",
             "minecraft:wheat_seeds", "minecraft:stick", "#minecraft:saplings", "minecraft:poisonous_potato"));
-    /** Seconds you have to catch a fleeing bandit before they escape with your things. */
-    public static int tiempoEscape = 120;
-    /** Distance (blocks) from every player at which a fleeing bandit escapes. */
-    public static int distanciaEscape = 48;
+    /** A fleeing bandit escapes (with your things) when it is this far (blocks) from every player. */
+    public static int distanciaEscape = 96;
 
     // ---------- breaking in ----------
     public static boolean romperBloques = true;
@@ -136,12 +182,29 @@ public final class Ajustes {
 
     // ---------- load / save ----------
 
+    /** Version of the file format: 2 = gangs by unlocked level (1.1.0). */
+    private static final int VERSION = 2;
+    /** The original values, to go back to them. */
+    private static final JsonObject DEFECTO = aJson();
+
+    /** Back to the original values (keeps whether raids are on or off). */
+    public static void restaurar() {
+        boolean act = activado;
+        aplicar(DEFECTO.deepCopy());
+        activado = act;
+        guardar();
+    }
+
     public static void cargar() {
         try {
             if (Files.exists(ARCHIVO)) {
                 try (Reader r = Files.newBufferedReader(ARCHIVO, StandardCharsets.UTF_8)) {
                     JsonObject j = GSON.fromJson(r, JsonObject.class);
-                    if (j != null) aplicar(j);
+                    if (j != null) {
+                        aplicar(j);
+                        // Files from 1.0.x: the escape distance changed meaning (it is now the only escape rule)
+                        if (entero(j, "_version", 1, 1, 1000) < 2 && distanciaEscape == 48) distanciaEscape = 96;
+                    }
                 }
             }
         } catch (Exception e) {
@@ -166,6 +229,10 @@ public final class Ajustes {
         j.addProperty("_ayuda", "Ajustes de los rateros. horario: cualquiera, noche o dia. nivelHurto: suave, normal, agresivo o despiadado. "
                 + "Las probabilidades de banda van de 0 a 1 (0.2 = 1 de cada 5 dias). valioso*: porcentaje (0-100). "
                 + "Listas: ids como minecraft:diamond o etiquetas como #minecraft:planks; en valiosos, \"encantado\" = cualquier objeto encantado.");
+        j.addProperty("_niveles", "niveles: del mas bajo al mas alto. Se desbloquea para siempre la primera vez que tienes uno de sus materiales "
+                + "(en tu inventario, tu cofre de ender o los cofres cerca de ti). tamano: \"3-4\". Armas: madera, piedra, hierro, diamante o netherita; "
+                + "armaMejor sale con probMejor %. ballesteros: cuantos. forzador: si viene uno. jefe: % de que venga.");
+        j.addProperty("_version", VERSION);
         j.addProperty("activado", activado);
         j.addProperty("horario", horario);
         j.addProperty("multiplicadorNoche", multiplicadorNoche);
@@ -176,18 +243,13 @@ public final class Ajustes {
         j.addProperty("asaltarAldeas", asaltarAldeas);
         j.addProperty("radioOlfato", radioOlfato);
         j.addProperty("maxBanda", maxBanda);
-        j.addProperty("tamInicio", tamInicio);
-        j.addProperty("tamMedio", tamMedio);
-        j.addProperty("tamAvanzado", tamAvanzado);
-        j.addProperty("diaMedio", diaMedio);
-        j.addProperty("diaGrande", diaGrande);
         j.addProperty("rolLadron", rolLadron);
         j.addProperty("rolBallestero", rolBallestero);
         j.addProperty("rolForzador", rolForzador);
         j.addProperty("rolJefe", rolJefe);
-        j.addProperty("mejorarArmas", mejorarArmas);
-        j.addProperty("permitirDiamante", permitirDiamante);
-        j.addProperty("permitirEncantamientos", permitirEncantamientos);
+        JsonArray ns = new JsonArray();
+        niveles.forEach(n -> ns.add(n.aJson()));
+        j.add("niveles", ns);
         j.addProperty("nivelHurto", nivelHurto);
         j.addProperty("cargaLadron", cargaLadron);
         j.addProperty("cargaBallestero", cargaBallestero);
@@ -200,7 +262,6 @@ public final class Ajustes {
         j.add("valiosos", lista(valiosos));
         j.add("nuncaRobar", lista(nuncaRobar));
         j.add("ignorar", lista(ignorar));
-        j.addProperty("tiempoEscape", tiempoEscape);
         j.addProperty("distanciaEscape", distanciaEscape);
         j.addProperty("romperBloques", romperBloques);
         j.add("bloquesRompibles", lista(bloquesRompibles));
@@ -252,18 +313,20 @@ public final class Ajustes {
         asaltarAldeas = bool(j, "asaltarAldeas", asaltarAldeas);
         radioOlfato = entero(j, "radioOlfato", radioOlfato, 8, 128);
         maxBanda = entero(j, "maxBanda", maxBanda, 1, 32);
-        tamInicio = texto(j, "tamInicio", tamInicio);
-        tamMedio = texto(j, "tamMedio", tamMedio);
-        tamAvanzado = texto(j, "tamAvanzado", tamAvanzado);
-        diaMedio = entero(j, "diaMedio", diaMedio, 1, 100000);
-        diaGrande = entero(j, "diaGrande", diaGrande, 1, 100000);
         rolLadron = bool(j, "rolLadron", rolLadron);
         rolBallestero = bool(j, "rolBallestero", rolBallestero);
         rolForzador = bool(j, "rolForzador", rolForzador);
         rolJefe = bool(j, "rolJefe", rolJefe);
-        mejorarArmas = bool(j, "mejorarArmas", mejorarArmas);
-        permitirDiamante = bool(j, "permitirDiamante", permitirDiamante);
-        permitirEncantamientos = bool(j, "permitirEncantamientos", permitirEncantamientos);
+        if (j.has("niveles") && j.get("niveles").isJsonArray()) {
+            List<Nivel> def = nivelesDefecto();
+            List<Nivel> r = new ArrayList<>();
+            JsonArray a = j.getAsJsonArray("niveles");
+            for (int i = 0; i < a.size(); i++) {
+                if (!a.get(i).isJsonObject()) continue;
+                r.add(Nivel.leer(a.get(i).getAsJsonObject(), i < def.size() ? def.get(i) : def.get(def.size() - 1)));
+            }
+            if (!r.isEmpty()) niveles = r;
+        }
         nivelHurto = leerNivel(texto(j, "nivelHurto", nivelHurto));
         cargaLadron = entero(j, "cargaLadron", cargaLadron, 0, 54);
         cargaBallestero = entero(j, "cargaBallestero", cargaBallestero, 0, 54);
@@ -276,7 +339,6 @@ public final class Ajustes {
         valiosos = leerLista(j, "valiosos", valiosos);
         nuncaRobar = leerLista(j, "nuncaRobar", nuncaRobar);
         ignorar = leerLista(j, "ignorar", ignorar);
-        tiempoEscape = entero(j, "tiempoEscape", tiempoEscape, 10, 3600);
         distanciaEscape = entero(j, "distanciaEscape", distanciaEscape, 16, 256);
         romperBloques = bool(j, "romperBloques", romperBloques);
         bloquesRompibles = leerLista(j, "bloquesRompibles", bloquesRompibles);

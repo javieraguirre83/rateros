@@ -4,7 +4,7 @@ license="All Rights Reserved"
 
 [[mods]]
 modId="rateros"
-version="1.0.1"
+version="1.1.0"
 displayName="Rateros"
 authors="javieraguirre83"
 description='''Bandas de rateros que buscan y roban tus cosas ya trabajadas. / Bandit gangs that sniff out and steal your worked goods.'''

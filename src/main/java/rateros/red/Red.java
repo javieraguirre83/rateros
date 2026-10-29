@@ -9,11 +9,12 @@ import net.minecraftforge.network.ChannelBuilder;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.SimpleChannel;
 import rateros.core.Ajustes;
+import rateros.core.Niveles;
 import rateros.core.Rateros;
 
 /**
  * "pedir": the screen asks for the settings; "cambiar": it sends the changed values (saved at once);
- * "recargar": read the file again. The server always answers with "ajustes" (all values).
+ * "recargar": read the file again; "restaurar": back to the original values. The server always answers with "ajustes" (all values).
  */
 public final class Red {
     private static final Gson GSON = new Gson();
@@ -53,9 +54,14 @@ public final class Red {
                 }
             }
             case "recargar" -> Ajustes.cargar();
+            case "restaurar" -> Ajustes.restaurar();
             default -> { }
         }
-        alJugador(player, new Paquete("ajustes", Ajustes.aJson().toString()));
+        JsonObject respuesta = Ajustes.aJson();
+        // The level this player has unlocked, to show it on the screen
+        Niveles.actualizar(player);
+        respuesta.addProperty("_nivel", Ajustes.niveles.get(Niveles.nivel(player)).nombre());
+        alJugador(player, new Paquete("ajustes", respuesta.toString()));
     }
 
     public static void alServidor(Paquete p) {

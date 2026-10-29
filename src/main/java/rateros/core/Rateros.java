@@ -6,6 +6,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -40,6 +41,8 @@ public final class Rateros {
         TickEvent.PlayerTickEvent.Post.BUS.addListener(e -> {
             if (e.player() instanceof ServerPlayer p) Bandas.revisar(p);
         });
+        // Keep the unlocked level (and the last gang time) when the player respawns
+        PlayerEvent.Clone.BUS.addListener(e -> Bandas.copiar(e.getOriginal(), e.getEntity()));
         RegisterCommandsEvent.BUS.addListener(e -> Comandos.registrar(e.getDispatcher()));
         Red.registrar();
         if (FMLEnvironment.dist.isClient()) {

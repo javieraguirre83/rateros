@@ -4,7 +4,7 @@ Bandas de **rateros** que buscan y roban tus **cosas ya trabajadas**: lingotes, 
 
 ## ⬇️ Descargar
 
-**[Descargar el mod (.jar)](https://github.com/javieraguirre83/rateros/releases/download/ultima/Rateros-1.0.1-forge-26.2.jar)**
+**[Descargar el mod (.jar)](https://github.com/javieraguirre83/rateros/releases/download/ultima/Rateros-1.1.0-forge-26.2.jar)**
 
 1. Descarga el archivo `.jar`.
 2. Abre la carpeta `mods`:
@@ -24,24 +24,32 @@ Los textos salen en **español o inglés** según el idioma de tu Minecraft. El 
 - Al llegar suena un **cuerno** y sale el aviso **"¡Se acercan rateros!"**.
 - Llega una banda a la vez, a unos 24-40 bloques de ti. No llegan en dificultad Pacífica ni fuera del mundo normal.
 
-**La banda** (máximo 8)
+**La banda: según lo mejor que hayas conseguido**
 
-| Días del mundo | Rateros por banda |
-|---|---|
-| 1 a 10 | 2 a 3 |
-| 11 a 30 | 3 a 5 |
-| 31 en adelante | 4 a 8 |
+El tamaño de la banda y sus armas dependen del **material más valioso que hayas conseguido**. Cuenta lo que tengas en tu inventario, tu cofre de ender o los cofres cerca de ti, pero **solo lingotes, bloques y gemas**: armaduras, herramientas, pepitas y mineral crudo no cuentan. Cada nivel se **desbloquea para siempre** la primera vez, aunque luego te lo gastes.
+
+| Lo mejor que has conseguido | Rateros por banda | Quiénes | Armas |
+|---|---|---|---|
+| Nada valioso todavía (el cobre no cuenta) | 2 | Ladrones | Madera, a veces piedra |
+| Hierro o lapislázuli | 2 a 3 | + 1 ballestero | Piedra, a veces hierro |
+| Oro, esmeralda o redstone | 3 a 4 | + forzador | Hierro |
+| Diamante | 4 a 6 | + puede venir el jefe | Hierro, a veces diamante |
+| Netherita | 5 a 8 | + jefe siempre | Diamante, a veces netherita |
+
+- **Nunca traen armas encantadas.**
+- Con `/rateros` ves en qué nivel vas.
+- La tabla se puede cambiar en el archivo de ajustes (ver abajo).
 
 | Rol | Arma | Carga (Normal) | Probabilidad de llevarse algo valioso |
 |---|---|---|---|
-| 🟢 **Ladrón** | Espada de piedra o hierro (es más rápido) | 3 montones | 10% |
+| 🟢 **Ladrón** | Espada | 3 montones | 10% |
 | 🔵 **Ballestero** | Ballesta | 1 montón | 10% |
 | 🔴 **Forzador** | Hacha (rompe el doble de rápido) | 2 montones | 25% |
-| 🟣 **Jefe** (bandas grandes, día 31+) | Espada, abrigo largo, doble de vida | 4 montones | 50% |
+| 🟣 **Jefe** (desde el nivel diamante) | Espada, peto, doble de vida | 4 montones | 50% |
 
 - Cada rol tiene su ropa: pañuelo en la cara, chaleco y un **costal en la espalda**. El jefe trae abrigo largo morado con dorado.
-- Las armas **mejoran con los días**: piedra y hierro al inicio, luego algunos encantamientos y, rara vez, diamante (sobre todo el jefe).
-- Los **ladrones** no te atacan a menos que les pegues; los demás sí pelean.
+- Los **ladrones** no te atacan solos, pero si le pegas a cualquier ratero, **toda la banda** va contra ti. Los demás pelean en cuanto te ven.
+- Corren como un saqueador normal: **caminando no te les escapas, corriendo sí**.
 
 **El robo**
 - Buscan **baúles, baúles dobles, barriles, hornos y cajas de shulker** con cosas trabajadas. Los **abren** (con su animación y su sonido), sacan cosas y los cierran.
@@ -51,7 +59,8 @@ Los textos salen en **español o inglés** según el idioma de tu Minecraft. El 
 - **No pueden abrir el cofre de ender:** es tu lugar seguro.
 - **Cofre trampa:** al abrirlo un ratero, **se activa la redstone**, igual que contigo. ¡Pon trampas!
 - No tocan cofres de estructuras que todavía no has abierto.
-- Cuando se llenan (o si los lastimas mucho), **huyen**. **Si los matas, sueltan todo lo que robaron.** Si se alejan unos 48 bloques de ti o pasan 2 minutos, **escapan** y lo robado se pierde.
+- Cuando se llenan (o si los lastimas mucho), **huyen**, un poco más lento que tú corriendo. **Si los matas, sueltan todo lo que robaron.** Si te sacan **96 bloques de ventaja**, **escapan** y lo robado se pierde. Mientras los persigas de cerca, no se te escapan.
+- **Si te matan:** siguen robando, **recogen lo que soltaste** y luego huyen. Mientras estás en la pantalla de "Has muerto", la ventaja se cuenta desde donde moriste; si tardas en reaparecer, se te van. Cuidado: si reapareces cerca, te pueden volver a atacar.
 - El jefe, al morir, suelta además unas esmeraldas.
 - Si en 5 minutos no encuentran nada que robar, se van.
 
@@ -72,9 +81,9 @@ Los textos salen en **español o inglés** según el idioma de tu Minecraft. El 
 
 Presiona **Z** en el juego. Se cambia en **Opciones → Controles → Asignación de teclas → Rateros**. Tiene 4 pestañas y **cada cambio se guarda solo**:
 
-- **General:** activar o desactivar, horario, cuánto más probable de noche, % de banda por día (inicio y avanzado), día de mundo avanzado, aviso, si roban en aldeas.
-- **La banda:** máximo de rateros, tamaños por etapa, días de cada etapa, qué roles pueden venir, si las armas mejoran, si pueden traer diamante o encantamientos.
-- **El robo:** nivel de hurto, cuánto carga cada rol, % de ir por lo valioso de cada rol, segundos para alcanzarlos, distancia a la que escapan y radio en el que olfatean.
+- **General:** activar o desactivar, horario, cuánto más probable de noche, % de banda por día (inicio y avanzado), día de mundo avanzado, aviso, si roban en aldeas. Abajo: **Restaurar valores originales** (deja el interruptor de asaltos como esté).
+- **La banda:** máximo de rateros, qué roles pueden venir y **en qué nivel vas**.
+- **El robo:** nivel de hurto, cuánto carga cada rol, % de ir por lo valioso de cada rol, ventaja en bloques para escapar y radio en el que olfatean.
 - **Cómo entran:** si rompen bloques y cuánto tardan. Abajo: **Abrir carpeta de ajustes** y **Recargar archivo**.
 
 **Nivel de hurto**
@@ -106,6 +115,18 @@ Las **listas** solo se editan en el archivo:
 
 Se usan ids (`minecraft:diamond`) o etiquetas con `#` (`#minecraft:planks` = cualquier tablón).
 
+**La tabla de niveles** (`niveles`) también está en el archivo, del nivel más bajo al más alto. Cada nivel tiene:
+
+| Campo | Qué es | Ejemplo |
+|---|---|---|
+| `materiales` | Lo que desbloquea ese nivel | `["minecraft:diamond", "minecraft:diamond_block"]` |
+| `tamano` | Cuántos rateros llegan | `"4-6"` |
+| `armaBase` / `armaMejor` | Material de las armas: `madera`, `piedra`, `hierro`, `diamante` o `netherita` | `"hierro"` / `"diamante"` |
+| `probMejor` | % de que traigan el arma mejor (el jefe, el doble) | `20` |
+| `ballesteros` | Cuántos ballesteros vienen | `1` |
+| `forzador` | Si viene un forzador | `true` |
+| `jefe` | % de que venga el jefe | `50` |
+
 ## 💻 Comandos
 
 | Comando | Qué hace |
@@ -119,4 +140,4 @@ Se usan ids (`minecraft:diamond`) o etiquetas con `#` (`#minecraft:planks` = cua
 | `/rateros invocar 6` | **(Necesita trucos)** Una banda de 6 |
 | `/rateros retirar` | **(Necesita trucos)** Quita a los rateros cercanos (sueltan lo que llevaban) |
 
-Para activar trucos en un mundo que no los tiene: **Esc → Abrir en LAN → Permitir trucos: Sí → Iniciar mundo LAN**.
+Los trucos se activan al **crear el mundo** (**Permitir trucos: Sí**). En la versión 26.2, "Abrir en LAN" con comandos no siempre te los da a ti si el mundo se creó sin trucos. Todo lo demás (ajustes, activar y desactivar) funciona sin trucos.

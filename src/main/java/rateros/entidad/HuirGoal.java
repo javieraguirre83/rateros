@@ -7,8 +7,10 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
 
-/** Running away with the loot: away from the nearest player, fast. */
+/** Running away with the loot, away from the nearest player (a bit slower than you sprinting). */
 public class HuirGoal extends Goal {
+    /** A bit slower than a sprinting player: if you chase them running, you catch up. */
+    private static final double VELOCIDAD = 0.95;
     private final Ratero ratero;
     private int recalcular = 0;
 
@@ -34,6 +36,6 @@ public class HuirGoal extends Goal {
         Player p = ratero.level().getNearestPlayer(ratero, 64);
         Vec3 desde = p != null ? p.position() : ratero.position().add(ratero.getRandom().nextGaussian(), 0, ratero.getRandom().nextGaussian());
         Vec3 destino = LandRandomPos.getPosAway(ratero, 24, 8, desde);
-        if (destino != null) ratero.getNavigation().moveTo(destino.x, destino.y, destino.z, 1.35);
+        if (destino != null) ratero.getNavigation().moveTo(destino.x, destino.y, destino.z, VELOCIDAD);
     }
 }

@@ -18,6 +18,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import rateros.core.Ajustes;
 import rateros.core.Bandas;
+import rateros.core.Niveles;
 import rateros.entidad.Ratero;
 
 import java.util.ArrayList;
@@ -77,6 +78,10 @@ public final class Comandos {
                 Component.translatable("rateros.horario." + Ajustes.horario)), false);
         ctx.getSource().sendSuccess(() -> Component.translatable("rateros.estado.hurto", Component.translatable("rateros.nivel." + Ajustes.nivelHurto)), false);
         if (ctx.getSource().getEntity() instanceof ServerPlayer p) {
+            Niveles.actualizar(p);
+            String nombre = Niveles.datos(p).nombre();
+            ctx.getSource().sendSuccess(() -> Component.translatable("rateros.estado.nivel",
+                    Component.translatableWithFallback("rateros.etapa." + nombre, nombre).withStyle(ChatFormatting.YELLOW)), false);
             int cerca = Bandas.alrededor(p, 128).size();
             if (cerca > 0) ctx.getSource().sendSuccess(() -> Component.translatable("rateros.estado.cerca", cerca).withStyle(ChatFormatting.RED), false);
         }

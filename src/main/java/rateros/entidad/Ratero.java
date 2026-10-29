@@ -81,7 +81,7 @@ public class Ratero extends Pillager implements ContainerUser {
         goalSelector.addGoal(0, new FloatGoal(this));
         goalSelector.addGoal(1, new HuirGoal(this));
         goalSelector.addGoal(2, new RangedCrossbowAttackGoal<>(this, 1.0, 8.0F));
-        goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.15, false) {
+        goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0, false) {
             @Override
             public boolean canUse() {
                 return !isHolding(Items.CROSSBOW) && super.canUse();
@@ -179,15 +179,24 @@ public class Ratero extends Pillager implements ContainerUser {
         if (getHealth() < getMaxHealth() * 0.35F && tomados > 0) huir();
         // Nothing to steal for a long time: the gang leaves
         if (!huyendo && ticksVida > 20 * 60 * 5 && getTarget() == null) huir();
+        // Only distance lets them escape: if you keep up with them, they never get away
         if (huyendo) {
             ticksHuyendo++;
-            if (ticksHuyendo % 20 == 0 && (ticksHuyendo > Ajustes.tiempoEscape * 20 || lejosDeTodos())) escapar();
+            if (ticksHuyendo % 20 == 0 && lejosDeTodos()) escapar();
         }
     }
 
+    /**
+     * Far from every player? A player on the death screen still counts from where they died
+     * (that entity stays in the world until respawning), so they do not vanish the instant you die.
+     */
     private boolean lejosDeTodos() {
         double d = Ajustes.distanciaEscape;
-        return level().getNearestPlayer(this, d) == null;
+        for (Player p : level().players()) {
+            if (p.isSpectator()) continue;
+            if (p.distanceToSqr(this) < d * d) return false;
+        }
+        return true;
     }
 
     /** Gone, and whatever it carried is lost. */

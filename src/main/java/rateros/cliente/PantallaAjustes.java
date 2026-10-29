@@ -162,29 +162,25 @@ public class PantallaAjustes extends Screen {
                 interruptor(5, x, w, "aviso", null);
                 etiqueta(6, "rateros.aj.asaltarAldeas");
                 interruptor(6, x, w, "asaltarAldeas", null);
+                addRenderableWidget(Button.builder(Component.translatable("rateros.pantalla.restaurar"), b -> {
+                    Red.alServidor(new Paquete("restaurar", ""));
+                    cargado = false;
+                    aviso = Component.translatable("rateros.pantalla.restaurado");
+                    avisoHasta = System.currentTimeMillis() + 3000;
+                }).bounds(izq, height - 56, der - izq, 20).build());
             }
             case BANDA -> {
                 etiqueta(0, "rateros.aj.maxBanda");
                 numero(0, x, 50, "maxBanda", 8, 1, true);
-                etiqueta(1, "rateros.aj.tamanos");
-                textoRango(1, x, 40, "tamInicio", "2-3");
-                textoRango(1, x + 44, 40, "tamMedio", "3-5");
-                textoRango(1, x + 88, 40, "tamAvanzado", "4-8");
-                etiqueta(2, "rateros.aj.dias");
-                numero(2, x, 40, "diaMedio", 11, 1, true);
-                numero(2, x + 44, 40, "diaGrande", 31, 1, true);
-                etiqueta(3, "rateros.aj.roles");
+                etiqueta(1, "rateros.aj.roles");
                 int wr = Math.max(40, w / 4 - 2);
-                interruptor(3, x, wr, "rolLadron", "rateros.rolcorto.ladron");
-                interruptor(3, x + (wr + 2), wr, "rolBallestero", "rateros.rolcorto.ballestero");
-                interruptor(3, x + 2 * (wr + 2), wr, "rolForzador", "rateros.rolcorto.forzador");
-                interruptor(3, x + 3 * (wr + 2), wr, "rolJefe", "rateros.rolcorto.jefe");
-                etiqueta(4, "rateros.aj.mejorarArmas");
-                interruptor(4, x, w, "mejorarArmas", null);
-                etiqueta(5, "rateros.aj.permitirDiamante");
-                interruptor(5, x, w, "permitirDiamante", null);
-                etiqueta(6, "rateros.aj.permitirEncantamientos");
-                interruptor(6, x, w, "permitirEncantamientos", null);
+                interruptor(1, x, wr, "rolLadron", "rateros.rolcorto.ladron");
+                interruptor(1, x + (wr + 2), wr, "rolBallestero", "rateros.rolcorto.ballestero");
+                interruptor(1, x + 2 * (wr + 2), wr, "rolForzador", "rateros.rolcorto.forzador");
+                interruptor(1, x + 3 * (wr + 2), wr, "rolJefe", "rateros.rolcorto.jefe");
+                etiqueta(2, "rateros.aj.tuNivel");
+                addRenderableWidget(Button.builder(Component.translatable("rateros.pantalla.carpeta"), b -> abrirCarpeta())
+                        .bounds(izq, height - 56, der - izq, 20).build());
             }
             case HURTO -> {
                 etiqueta(0, "rateros.aj.nivelHurto");
@@ -199,12 +195,10 @@ public class PantallaAjustes extends Screen {
                 numero(2, x + 44, 40, "valiosoBallestero", 10, 1, true);
                 numero(2, x + 88, 40, "valiosoForzador", 25, 1, true);
                 numero(2, x + 132, 40, "valiosoJefe", 50, 1, true);
-                etiqueta(3, "rateros.aj.tiempoEscape");
-                numero(3, x, 50, "tiempoEscape", 120, 1, true);
-                etiqueta(4, "rateros.aj.distanciaEscape");
-                numero(4, x, 50, "distanciaEscape", 48, 1, true);
-                etiqueta(5, "rateros.aj.radioOlfato");
-                numero(5, x, 50, "radioOlfato", 48, 1, true);
+                etiqueta(3, "rateros.aj.distanciaEscape");
+                numero(3, x, 50, "distanciaEscape", 96, 1, true);
+                etiqueta(4, "rateros.aj.radioOlfato");
+                numero(4, x, 50, "radioOlfato", 48, 1, true);
             }
             case ENTRADA -> {
                 etiqueta(0, "rateros.aj.romperBloques");
@@ -246,11 +240,12 @@ public class PantallaAjustes extends Screen {
         switch (pestana) {
             case GENERAL -> g.text(font, gris.apply("rateros.aj.prob_ayuda"), x + 90, fila(3) + 6, -1);
             case BANDA -> {
-                g.text(font, gris.apply("rateros.aj.tamanos_ayuda"), x + 132, fila(1) + 6, -1);
-                g.text(font, gris.apply("rateros.aj.dias_ayuda"), x + 88, fila(2) + 6, -1);
+                String nombre = texto("_nivel", "nada");
+                g.text(font, Component.translatableWithFallback("rateros.etapa." + nombre, nombre).withStyle(ChatFormatting.YELLOW), x, fila(2) + 6, -1);
+                g.textWithWordWrap(font, gris.apply("rateros.aj.niveles_ayuda"), izq, fila(3) + 6, der - izq, -1);
             }
             case HURTO -> {
-                g.textWithWordWrap(font, gris.apply("rateros.aj.hurto_ayuda"), izq, fila(6) + 2, der - izq, -1);
+                g.textWithWordWrap(font, gris.apply("rateros.aj.hurto_ayuda"), izq, fila(5) + 2, der - izq, -1);
             }
             case ENTRADA -> g.textWithWordWrap(font, gris.apply("rateros.aj.listas_ayuda"), izq, fila(2) + 6, der - izq, -1);
         }
