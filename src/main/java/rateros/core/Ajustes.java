@@ -1,0 +1,287 @@
+package rateros.core;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
+import java.io.Reader;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+/** All settings: config/rateros/ajustes.json (also editable with the Z screen and /rateros ajustes). */
+public final class Ajustes {
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+    public static final Path ARCHIVO = Path.of("config", "rateros", "ajustes.json");
+
+    // ---------- general ----------
+    public static boolean activado = true;
+    /** "cualquiera", "noche" or "dia". */
+    public static String horario = "cualquiera";
+    /** With "cualquiera": how many times more likely at night. */
+    public static double multiplicadorNoche = 2.0;
+    /** Chance of a gang per Minecraft day at the start of the world and in an advanced world (0..1). */
+    public static double probInicio = 0.2;
+    public static double probAvanzada = 0.5;
+    /** World day from which the advanced chance applies (it grows little by little until then). */
+    public static int diaAvanzado = 60;
+    public static boolean aviso = true;
+    /** Rob village and structure chests too (already opened ones; never fresh loot chests). */
+    public static boolean asaltarAldeas = true;
+    /** Radius (blocks) in which they sniff out loot. */
+    public static int radioOlfato = 48;
+
+    // ---------- the gang ----------
+    public static int maxBanda = 8;
+    public static String tamInicio = "2-3";
+    public static String tamMedio = "3-5";
+    public static String tamAvanzado = "4-8";
+    public static int diaMedio = 11;
+    public static int diaGrande = 31;
+    public static boolean rolLadron = true, rolBallestero = true, rolForzador = true, rolJefe = true;
+    public static boolean mejorarArmas = true;
+    public static boolean permitirDiamante = true;
+    public static boolean permitirEncantamientos = true;
+
+    // ---------- the theft ----------
+    /** "suave", "normal", "agresivo" or "despiadado". */
+    public static String nivelHurto = "normal";
+    public static int cargaLadron = 3, cargaBallestero = 1, cargaForzador = 2, cargaJefe = 4;
+    public static int valiosoLadron = 10, valiosoBallestero = 10, valiosoForzador = 25, valiosoJefe = 50;
+    public static List<String> valiosos = new ArrayList<>(List.of(
+            "minecraft:diamond", "minecraft:emerald", "minecraft:netherite_ingot", "minecraft:netherite_scrap",
+            "minecraft:diamond_block", "minecraft:emerald_block", "minecraft:netherite_block", "minecraft:gold_block",
+            "minecraft:ancient_debris", "minecraft:totem_of_undying", "minecraft:elytra", "minecraft:enchanted_golden_apple",
+            "minecraft:nether_star", "minecraft:heart_of_the_sea", "minecraft:trident", "minecraft:beacon", "encantado"));
+    public static List<String> nuncaRobar = new ArrayList<>();
+    /** Junk they are not interested in (not "worked" goods). */
+    public static List<String> ignorar = new ArrayList<>(List.of(
+            "minecraft:dirt", "minecraft:grass_block", "minecraft:gravel", "minecraft:sand", "minecraft:red_sand",
+            "minecraft:cobblestone", "minecraft:cobbled_deepslate", "minecraft:netherrack", "minecraft:tuff",
+            "minecraft:diorite", "minecraft:andesite", "minecraft:granite", "minecraft:rotten_flesh",
+            "minecraft:wheat_seeds", "minecraft:stick", "#minecraft:saplings", "minecraft:poisonous_potato"));
+    /** Seconds you have to catch a fleeing bandit before they escape with your things. */
+    public static int tiempoEscape = 120;
+    /** Distance (blocks) from every player at which a fleeing bandit escapes. */
+    public static int distanciaEscape = 48;
+
+    // ---------- breaking in ----------
+    public static boolean romperBloques = true;
+    public static List<String> bloquesRompibles = new ArrayList<>(List.of(
+            "#minecraft:wooden_doors", "#minecraft:wooden_trapdoors", "#minecraft:fence_gates", "#minecraft:planks",
+            "#minecraft:logs", "#minecraft:wooden_fences", "#minecraft:wooden_stairs", "#minecraft:wooden_slabs",
+            "#minecraft:wool", "#minecraft:leaves", "#minecraft:impermeable", "minecraft:glass_pane",
+            "minecraft:dirt", "minecraft:grass_block", "minecraft:coarse_dirt", "minecraft:hay_block"));
+    /** Seconds it takes a normal bandit to break one block (the forcer takes half). */
+    public static int segundosRomper = 4;
+
+    // ---------- theft level ----------
+
+    /** Multiplier of how much each bandit carries. 0 = no limit. */
+    public static double factorCarga() {
+        return switch (nivelHurto) {
+            case "suave" -> 0.5;
+            case "agresivo" -> 2.0;
+            case "despiadado" -> 0.0;
+            default -> 1.0;
+        };
+    }
+
+    /** Multiplier of the chance of taking something valuable. */
+    public static double factorValioso() {
+        return switch (nivelHurto) {
+            case "suave" -> 0.5;
+            case "agresivo" -> 1.5;
+            case "despiadado" -> 2.0;
+            default -> 1.0;
+        };
+    }
+
+    public static String leerNivel(String texto) {
+        String t = texto == null ? "" : texto.toLowerCase(Locale.ROOT);
+        return switch (t) {
+            case "suave", "soft", "gentle" -> "suave";
+            case "agresivo", "aggressive" -> "agresivo";
+            case "despiadado", "ruthless" -> "despiadado";
+            default -> "normal";
+        };
+    }
+
+    public static String leerHorario(String texto) {
+        String t = texto == null ? "" : texto.toLowerCase(Locale.ROOT).replace("í", "i");
+        return switch (t) {
+            case "noche", "night" -> "noche";
+            case "dia", "day" -> "dia";
+            default -> "cualquiera";
+        };
+    }
+
+    /** {min, max} of a size text like "3-5". */
+    public static int[] rango(String texto, int min, int max) {
+        try {
+            String[] p = texto.trim().split("-");
+            int a = Integer.parseInt(p[0].trim());
+            int b = p.length > 1 ? Integer.parseInt(p[1].trim()) : a;
+            return new int[]{Math.max(1, Math.min(a, b)), Math.max(1, Math.max(a, b))};
+        } catch (Exception e) {
+            return new int[]{min, max};
+        }
+    }
+
+    // ---------- load / save ----------
+
+    public static void cargar() {
+        try {
+            if (Files.exists(ARCHIVO)) {
+                try (Reader r = Files.newBufferedReader(ARCHIVO, StandardCharsets.UTF_8)) {
+                    JsonObject j = GSON.fromJson(r, JsonObject.class);
+                    if (j != null) aplicar(j);
+                }
+            }
+        } catch (Exception e) {
+            Rateros.LOGGER.error("No se pudo leer " + ARCHIVO, e);
+        }
+        guardar();
+    }
+
+    public static void guardar() {
+        try {
+            Files.createDirectories(ARCHIVO.getParent());
+            try (Writer w = Files.newBufferedWriter(ARCHIVO, StandardCharsets.UTF_8)) {
+                GSON.toJson(aJson(), w);
+            }
+        } catch (Exception e) {
+            Rateros.LOGGER.error("No se pudo guardar " + ARCHIVO, e);
+        }
+    }
+
+    public static JsonObject aJson() {
+        JsonObject j = new JsonObject();
+        j.addProperty("_ayuda", "Ajustes de los rateros. horario: cualquiera, noche o dia. nivelHurto: suave, normal, agresivo o despiadado. "
+                + "Las probabilidades de banda van de 0 a 1 (0.2 = 1 de cada 5 dias). valioso*: porcentaje (0-100). "
+                + "Listas: ids como minecraft:diamond o etiquetas como #minecraft:planks; en valiosos, \"encantado\" = cualquier objeto encantado.");
+        j.addProperty("activado", activado);
+        j.addProperty("horario", horario);
+        j.addProperty("multiplicadorNoche", multiplicadorNoche);
+        j.addProperty("probInicio", probInicio);
+        j.addProperty("probAvanzada", probAvanzada);
+        j.addProperty("diaAvanzado", diaAvanzado);
+        j.addProperty("aviso", aviso);
+        j.addProperty("asaltarAldeas", asaltarAldeas);
+        j.addProperty("radioOlfato", radioOlfato);
+        j.addProperty("maxBanda", maxBanda);
+        j.addProperty("tamInicio", tamInicio);
+        j.addProperty("tamMedio", tamMedio);
+        j.addProperty("tamAvanzado", tamAvanzado);
+        j.addProperty("diaMedio", diaMedio);
+        j.addProperty("diaGrande", diaGrande);
+        j.addProperty("rolLadron", rolLadron);
+        j.addProperty("rolBallestero", rolBallestero);
+        j.addProperty("rolForzador", rolForzador);
+        j.addProperty("rolJefe", rolJefe);
+        j.addProperty("mejorarArmas", mejorarArmas);
+        j.addProperty("permitirDiamante", permitirDiamante);
+        j.addProperty("permitirEncantamientos", permitirEncantamientos);
+        j.addProperty("nivelHurto", nivelHurto);
+        j.addProperty("cargaLadron", cargaLadron);
+        j.addProperty("cargaBallestero", cargaBallestero);
+        j.addProperty("cargaForzador", cargaForzador);
+        j.addProperty("cargaJefe", cargaJefe);
+        j.addProperty("valiosoLadron", valiosoLadron);
+        j.addProperty("valiosoBallestero", valiosoBallestero);
+        j.addProperty("valiosoForzador", valiosoForzador);
+        j.addProperty("valiosoJefe", valiosoJefe);
+        j.add("valiosos", lista(valiosos));
+        j.add("nuncaRobar", lista(nuncaRobar));
+        j.add("ignorar", lista(ignorar));
+        j.addProperty("tiempoEscape", tiempoEscape);
+        j.addProperty("distanciaEscape", distanciaEscape);
+        j.addProperty("romperBloques", romperBloques);
+        j.add("bloquesRompibles", lista(bloquesRompibles));
+        j.addProperty("segundosRomper", segundosRomper);
+        return j;
+    }
+
+    private static JsonArray lista(List<String> l) {
+        JsonArray a = new JsonArray();
+        l.forEach(a::add);
+        return a;
+    }
+
+    private static List<String> leerLista(JsonObject j, String clave, List<String> actual) {
+        if (!j.has(clave) || !j.get(clave).isJsonArray()) return actual;
+        List<String> r = new ArrayList<>();
+        for (JsonElement e : j.getAsJsonArray(clave)) {
+            String s = e.getAsString().trim();
+            if (!s.isEmpty()) r.add(s);
+        }
+        return r;
+    }
+
+    private static int entero(JsonObject j, String k, int actual, int min, int max) {
+        try { return j.has(k) ? Math.max(min, Math.min(max, j.get(k).getAsInt())) : actual; } catch (Exception e) { return actual; }
+    }
+
+    private static double decimal(JsonObject j, String k, double actual, double min, double max) {
+        try { return j.has(k) ? Math.max(min, Math.min(max, j.get(k).getAsDouble())) : actual; } catch (Exception e) { return actual; }
+    }
+
+    private static boolean bool(JsonObject j, String k, boolean actual) {
+        try { return j.has(k) ? j.get(k).getAsBoolean() : actual; } catch (Exception e) { return actual; }
+    }
+
+    private static String texto(JsonObject j, String k, String actual) {
+        try { return j.has(k) ? j.get(k).getAsString() : actual; } catch (Exception e) { return actual; }
+    }
+
+    /** Applies the values present in a JSON (missing ones keep their value). */
+    public static void aplicar(JsonObject j) {
+        activado = bool(j, "activado", activado);
+        horario = leerHorario(texto(j, "horario", horario));
+        multiplicadorNoche = decimal(j, "multiplicadorNoche", multiplicadorNoche, 0.1, 20);
+        probInicio = decimal(j, "probInicio", probInicio, 0, 1);
+        probAvanzada = decimal(j, "probAvanzada", probAvanzada, 0, 1);
+        diaAvanzado = entero(j, "diaAvanzado", diaAvanzado, 1, 100000);
+        aviso = bool(j, "aviso", aviso);
+        asaltarAldeas = bool(j, "asaltarAldeas", asaltarAldeas);
+        radioOlfato = entero(j, "radioOlfato", radioOlfato, 8, 128);
+        maxBanda = entero(j, "maxBanda", maxBanda, 1, 32);
+        tamInicio = texto(j, "tamInicio", tamInicio);
+        tamMedio = texto(j, "tamMedio", tamMedio);
+        tamAvanzado = texto(j, "tamAvanzado", tamAvanzado);
+        diaMedio = entero(j, "diaMedio", diaMedio, 1, 100000);
+        diaGrande = entero(j, "diaGrande", diaGrande, 1, 100000);
+        rolLadron = bool(j, "rolLadron", rolLadron);
+        rolBallestero = bool(j, "rolBallestero", rolBallestero);
+        rolForzador = bool(j, "rolForzador", rolForzador);
+        rolJefe = bool(j, "rolJefe", rolJefe);
+        mejorarArmas = bool(j, "mejorarArmas", mejorarArmas);
+        permitirDiamante = bool(j, "permitirDiamante", permitirDiamante);
+        permitirEncantamientos = bool(j, "permitirEncantamientos", permitirEncantamientos);
+        nivelHurto = leerNivel(texto(j, "nivelHurto", nivelHurto));
+        cargaLadron = entero(j, "cargaLadron", cargaLadron, 0, 54);
+        cargaBallestero = entero(j, "cargaBallestero", cargaBallestero, 0, 54);
+        cargaForzador = entero(j, "cargaForzador", cargaForzador, 0, 54);
+        cargaJefe = entero(j, "cargaJefe", cargaJefe, 0, 54);
+        valiosoLadron = entero(j, "valiosoLadron", valiosoLadron, 0, 100);
+        valiosoBallestero = entero(j, "valiosoBallestero", valiosoBallestero, 0, 100);
+        valiosoForzador = entero(j, "valiosoForzador", valiosoForzador, 0, 100);
+        valiosoJefe = entero(j, "valiosoJefe", valiosoJefe, 0, 100);
+        valiosos = leerLista(j, "valiosos", valiosos);
+        nuncaRobar = leerLista(j, "nuncaRobar", nuncaRobar);
+        ignorar = leerLista(j, "ignorar", ignorar);
+        tiempoEscape = entero(j, "tiempoEscape", tiempoEscape, 10, 3600);
+        distanciaEscape = entero(j, "distanciaEscape", distanciaEscape, 16, 256);
+        romperBloques = bool(j, "romperBloques", romperBloques);
+        bloquesRompibles = leerLista(j, "bloquesRompibles", bloquesRompibles);
+        segundosRomper = entero(j, "segundosRomper", segundosRomper, 1, 120);
+    }
+
+    private Ajustes() {}
+}

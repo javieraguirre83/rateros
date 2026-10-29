@@ -1,0 +1,24 @@
+modLoader="javafml"
+loaderVersion="[65,)"
+license="All Rights Reserved"
+
+[[mods]]
+modId="rateros"
+version="1.0.0"
+displayName="Rateros"
+authors="javieraguirre83"
+description='''Bandas de rateros que buscan y roban tus cosas ya trabajadas. / Bandit gangs that sniff out and steal your worked goods.'''
+
+[[dependencies.rateros]]
+    modId="forge"
+    mandatory=true
+    versionRange="[65,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.rateros]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[26.2,26.3)"
+    ordering="NONE"
+    side="BOTH"
