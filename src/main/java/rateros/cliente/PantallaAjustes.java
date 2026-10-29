@@ -101,7 +101,9 @@ public class PantallaAjustes extends Screen {
     private void numero(int fila, int x, int w, String clave, double def, double escala, boolean entero) {
         double v = num(clave, def) * escala;
         EditBox e = new EditBox(font, x, fila(fila), w, 20, Component.empty());
-        e.setValue(entero || v == Math.rint(v) ? String.valueOf((long) Math.rint(v)) : String.valueOf(v));
+        // Show "20" instead of "20.000000000000004" (0.2 x 100)
+        e.setValue(entero || Math.abs(v - Math.rint(v)) < 1e-6 ? String.valueOf((long) Math.rint(v))
+                : String.valueOf(Math.round(v * 100) / 100.0));
         e.setResponder(s -> {
             try {
                 double n = Double.parseDouble(s.trim().replace(',', '.'));
@@ -152,8 +154,8 @@ public class PantallaAjustes extends Screen {
                 etiqueta(2, "rateros.aj.multiplicadorNoche");
                 numero(2, x, 50, "multiplicadorNoche", 2, 1, false);
                 etiqueta(3, "rateros.aj.prob");
-                numero(3, x, 40, "probInicio", 0.2, 100, true);
-                numero(3, x + 44, 40, "probAvanzada", 0.5, 100, true);
+                numero(3, x, 40, "probInicio", 0.2, 100, false);
+                numero(3, x + 44, 40, "probAvanzada", 0.5, 100, false);
                 etiqueta(4, "rateros.aj.diaAvanzado");
                 numero(4, x, 50, "diaAvanzado", 60, 1, true);
                 etiqueta(5, "rateros.aj.aviso");
