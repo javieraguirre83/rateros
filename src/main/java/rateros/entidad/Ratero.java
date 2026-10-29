@@ -87,6 +87,7 @@ public class Ratero extends Pillager implements ContainerUser {
                 return !isHolding(Items.CROSSBOW) && super.canUse();
             }
         });
+        goalSelector.addGoal(2, new PersecucionGoal(this));
         goalSelector.addGoal(3, new RobarGoal(this));
         goalSelector.addGoal(8, new WaterAvoidingRandomStrollGoal(this, 0.6));
         goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 15.0F));
@@ -118,7 +119,13 @@ public class Ratero extends Pillager implements ContainerUser {
         if (stack.isEmpty() || !botin.canAddItem(stack)) return false;
         botin.addItem(stack);
         tomados++;
-        if (!puedeCargar()) huir();
+        if (!puedeCargar() || sacoLleno()) huir();
+        return true;
+    }
+
+    /** No empty slot left in the sack (matters with the "ruthless" level, which has no limit). */
+    public boolean sacoLleno() {
+        for (ItemStack s : botin.getItems()) if (s.isEmpty()) return false;
         return true;
     }
 
@@ -142,6 +149,7 @@ public class Ratero extends Pillager implements ContainerUser {
     @Override
     protected void pickUpItem(ServerLevel level, ItemEntity entity) {
         ItemStack stack = entity.getItem();
+        if (entity.getPersistentData().getBooleanOr(Rompedor.NO_TOMAR, false)) return;
         if (!wantsToPickUp(level, stack)) return;
         onItemPickup(entity);
         take(entity, stack.getCount());

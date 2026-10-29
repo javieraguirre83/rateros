@@ -45,14 +45,15 @@ public class RobarGoal extends Goal {
     private final Set<BlockPos> descartados = new HashSet<>();
     private int esperaBusqueda = 0;
     private int repath = 0;
+    private Path camino = null;
     private int ticksSinAvance = 0;
     private double mejorDistancia = Double.MAX_VALUE;
-    private BlockPos rompiendo = null;
-    private int ticksRompiendo = 0;
+    private final Rompedor rompedor;
     private int esperaToma = 0;
 
     public RobarGoal(Ratero ratero) {
         this.ratero = ratero;
+        this.rompedor = new Rompedor(ratero);
         setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
 
@@ -114,7 +115,7 @@ public class RobarGoal extends Goal {
         repath = 0;
         ticksSinAvance = 0;
         mejorDistancia = Double.MAX_VALUE;
-        rompiendo = null;
+        rompedor.cancelar();
         esperaToma = 20;
     }
 
@@ -133,8 +134,7 @@ public class RobarGoal extends Goal {
     @Override
     public void stop() {
         cerrar();
-        if (rompiendo != null) ratero.level().destroyBlockProgress(ratero.getId(), rompiendo, -1);
-        rompiendo = null;
+        rompedor.cancelar();
         ratero.getNavigation().stop();
         objetivo = null;
     }
@@ -157,10 +157,13 @@ public class RobarGoal extends Goal {
             return;
         }
         cerrar();
-        if (rompiendo != null) {
-            romperTick();
-            return;
+        if (rompedor.tick()) return;
+        if (--repath <= 0) {
+            repath = 20;
+            camino = ratero.getNavigation().createPath(objetivo, 1);
+            ratero.getNavigation().moveTo(camino, 1.0);
         }
+        // Only break things when there is really no way around (no full path and already at the end of the partial one)
         double d = ratero.distanceToSqr(centro());
         if (d < mejorDistancia - 0.25) {
             mejorDistancia = d;
@@ -168,13 +171,12 @@ public class RobarGoal extends Goal {
         } else {
             ticksSinAvance++;
         }
-        boolean atorado = ticksSinAvance > 40 || ratero.getNavigation().isDone() && ticksSinAvance > 10;
+        boolean sinCamino = camino == null || !camino.canReach();
+        // Bumping into something (e.g. a closed door the path goes through) also counts
+        boolean atorado = sinCamino && ratero.getNavigation().isDone() && ticksSinAvance > 10
+                || ratero.horizontalCollision && ticksSinAvance > 30 || ticksSinAvance > 120;
         if (atorado) {
-            BlockPos estorbo = buscarEstorbo();
-            if (estorbo != null && puedeRomper(estorbo)) {
-                rompiendo = estorbo;
-                ticksRompiendo = 0;
-            } else {
+            if (!rompedor.intentar(centro(), objetivo)) {
                 // A wall they cannot break: forget this container and look for another
                 descartados.add(objetivo);
                 objetivo = null;
@@ -182,69 +184,6 @@ public class RobarGoal extends Goal {
             }
             ticksSinAvance = 0;
             mejorDistancia = Double.MAX_VALUE;
-            return;
-        }
-        if (--repath <= 0) {
-            repath = 20;
-            Path path = ratero.getNavigation().createPath(objetivo, 1);
-            ratero.getNavigation().moveTo(path, 1.0);
-        }
-    }
-
-    // ---------- breaking in ----------
-
-    /** The first solid block between the bandit and the container (at feet and head height). */
-    private BlockPos buscarEstorbo() {
-        BlockPos mejor = null;
-        double mejorD = Double.MAX_VALUE;
-        Vec3 fin = centro();
-        for (Vec3 inicio : new Vec3[]{ratero.position().add(0, 0.5, 0), ratero.getEyePosition()}) {
-            Vec3 dir = fin.subtract(inicio);
-            double largo = dir.length();
-            if (largo < 0.01) continue;
-            dir = dir.scale(1.0 / largo);
-            for (double t = 0.4; t < Math.min(largo, 4.0); t += 0.3) {
-                BlockPos pos = BlockPos.containing(inicio.add(dir.scale(t)));
-                if (pos.equals(objetivo)) break;
-                BlockState state = ratero.level().getBlockState(pos);
-                if (state.isAir() || state.getCollisionShape(ratero.level(), pos).isEmpty()) continue;
-                if (t < mejorD) {
-                    mejorD = t;
-                    mejor = pos;
-                }
-                break;
-            }
-        }
-        return mejor;
-    }
-
-    private boolean puedeRomper(BlockPos pos) {
-        if (!Ajustes.romperBloques || !(ratero.level() instanceof ServerLevel level)) return false;
-        if (!level.getGameRules().get(GameRules.MOB_GRIEFING)) return false;
-        BlockState state = level.getBlockState(pos);
-        if (level.getBlockEntity(pos) != null) return false;
-        return Botin.bloqueEnLista(Ajustes.bloquesRompibles, state);
-    }
-
-    private void romperTick() {
-        BlockState state = ratero.level().getBlockState(rompiendo);
-        if (state.isAir() || !puedeRomper(rompiendo)) {
-            ratero.level().destroyBlockProgress(ratero.getId(), rompiendo, -1);
-            rompiendo = null;
-            return;
-        }
-        ratero.getLookControl().setLookAt(Vec3.atCenterOf(rompiendo));
-        int total = Math.max(10, Ajustes.segundosRomper * 20 / (ratero.getRol() == Rol.FORZADOR ? 2 : 1));
-        ticksRompiendo++;
-        if (ticksRompiendo % 10 == 0) {
-            ratero.swing(InteractionHand.MAIN_HAND);
-            ratero.level().playSound(null, rompiendo, state.getSoundType().getHitSound(), SoundSource.HOSTILE, 1.0F, 0.8F);
-            ratero.level().destroyBlockProgress(ratero.getId(), rompiendo, Math.min(9, ticksRompiendo * 10 / total));
-        }
-        if (ticksRompiendo >= total) {
-            ratero.level().destroyBlockProgress(ratero.getId(), rompiendo, -1);
-            ratero.level().destroyBlock(rompiendo, true, ratero, 512);
-            rompiendo = null;
             repath = 0;
         }
     }

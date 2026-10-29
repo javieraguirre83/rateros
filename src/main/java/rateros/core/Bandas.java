@@ -110,8 +110,15 @@ public final class Bandas {
         for (Rol rol : roles(n, dia, r)) {
             Ratero ratero = Rateros.RATERO.get().create(level, EntitySpawnReason.EVENT);
             if (ratero == null) continue;
-            BlockPos p = donde.offset(r.nextInt(5) - 2, 0, r.nextInt(5) - 2);
-            p = new BlockPos(p.getX(), level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, p.getX(), p.getZ()), p.getZ());
+            // Spread them a little around the spot, each one on valid ground
+            BlockPos p = donde;
+            for (int k = 0; k < 6; k++) {
+                BlockPos q = superficie(level, donde.getX() + r.nextInt(5) - 2, donde.getZ() + r.nextInt(5) - 2);
+                if (sePuedeParar(level, q)) {
+                    p = q;
+                    break;
+                }
+            }
             ratero.snapTo(p.getX() + 0.5, p.getY(), p.getZ() + 0.5, r.nextFloat() * 360F, 0F);
             ratero.finalizeSpawn(level, level.getCurrentDifficultyAt(p), EntitySpawnReason.EVENT, null);
             ratero.setPatrolLeader(false);
@@ -131,20 +138,35 @@ public final class Bandas {
         return llegaron;
     }
 
-    /** A dry, open spot 24-40 blocks away. */
+    /**
+     * Can a bandit stand here? The two blocks of its body must be passable (air, grass, flowers, snow layer...)
+     * and without water or lava, and the block below must be solid ground.
+     */
+    public static boolean sePuedeParar(ServerLevel level, BlockPos p) {
+        for (BlockPos cuerpo : new BlockPos[]{p, p.above()}) {
+            if (!level.getBlockState(cuerpo).getCollisionShape(level, cuerpo).isEmpty()) return false;
+            if (!level.getFluidState(cuerpo).isEmpty()) return false;
+        }
+        BlockPos suelo = p.below();
+        return !level.getBlockState(suelo).getCollisionShape(level, suelo).isEmpty() && level.getFluidState(suelo).isEmpty();
+    }
+
+    /** Surface position at x, z (on top of the ground, ignoring leaves). */
+    private static BlockPos superficie(ServerLevel level, int x, int z) {
+        return new BlockPos(x, level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z), z);
+    }
+
+    /** An open spot 24-40 blocks away, on dry ground, not too far above or below you. */
     private static BlockPos lugar(ServerLevel level, BlockPos cerca, RandomSource r) {
-        for (int intento = 0; intento < 16; intento++) {
+        for (int intento = 0; intento < 32; intento++) {
             double ang = r.nextDouble() * Math.PI * 2;
             int d = 24 + r.nextInt(17);
             int x = cerca.getX() + (int) (Math.cos(ang) * d);
             int z = cerca.getZ() + (int) (Math.sin(ang) * d);
             if (!level.hasChunk(x >> 4, z >> 4)) continue;
-            int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
-            BlockPos p = new BlockPos(x, y, z);
-            if (!level.getFluidState(p.below()).isEmpty() || !level.getFluidState(p).isEmpty()) continue;
-            if (!level.getBlockState(p).isAir()) continue;
-            if (Math.abs(y - cerca.getY()) > 24) continue;
-            return p;
+            BlockPos p = superficie(level, x, z);
+            if (Math.abs(p.getY() - cerca.getY()) > 24) continue;
+            if (sePuedeParar(level, p)) return p;
         }
         return null;
     }
