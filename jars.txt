@@ -1,0 +1,17 @@
+/home/runner/.gradle/caches/minecraftforge/forgegradle/mavenizer/caches/forge/.global/mcp/26.2-20260616.103818/forge/8a125c613a05de4682e8a8633c5f7123d78845fa/modifyAccess.jar
+/home/runner/.gradle/caches/minecraftforge/forgegradle/mavenizer/caches/forge/.global/mcp/26.2-20260616.103818/forge/8a125c613a05de4682e8a8633c5f7123d78845fa/stripSides.jar
+/home/runner/.gradle/caches/minecraftforge/forgegradle/mavenizer/caches/forge/net/minecraftforge/forge/26.2-65.1.5/official/26.2/injected.jar
+/home/runner/.gradle/caches/minecraftforge/forgegradle/mavenizer/caches/forge/net/minecraftforge/forge/26.2-65.1.5/official/26.2/recompiled.jar
+/home/runner/.gradle/caches/minecraftforge/forgegradle/mavenizer/caches/maven/forge/net/minecraftforge/eventbus/7.0.5/eventbus-7.0.5.jar
+/home/runner/.gradle/caches/minecraftforge/forgegradle/mavenizer/caches/maven/forge/net/minecraftforge/fmlloader/26.2-65.1.5/fmlloader-26.2-65.1.5.jar
+/home/runner/.gradle/caches/minecraftforge/forgegradle/mavenizer/caches/maven/forge/net/minecraftforge/forge/26.2-65.1.5/forge-26.2-65.1.5-universal.jar
+/home/runner/.gradle/caches/minecraftforge/forgegradle/mavenizer/caches/maven/forge/net/minecraftforge/javafmllanguage/26.2-65.1.5/javafmllanguage-26.2-65.1.5.jar
+/home/runner/.gradle/caches/minecraftforge/forgegradle/mavenizer/caches/mcp/de/oceanlabs/mcp/mcp_config/26.2-20260616.103818/joined/extractServer/extractServer.jar
+/home/runner/.gradle/caches/minecraftforge/forgegradle/mavenizer/caches/mcp/de/oceanlabs/mcp/mcp_config/26.2-20260616.103818/joined/merge/merge.jar
+/home/runner/.gradle/caches/minecraftforge/forgegradle/mavenizer/caches/mcp/de/oceanlabs/mcp/mcp_config/26.2-20260616.103818/joined/stripClient.jar
+/home/runner/.gradle/caches/minecraftforge/forgegradle/mavenizer/caches/mcp/de/oceanlabs/mcp/mcp_config/26.2-20260616.103818/joined/stripServer.jar
+/home/runner/.gradle/caches/minecraftforge/forgegradle/mavenizer/caches/minecraft_tasks/26.2/client.jar
+/home/runner/.gradle/caches/modules-2/files-2.1/net.minecraftforge/eventbus/7.0.5/e779c3e3b40556826f0c5d6ffe65dc7b3f3573e7/eventbus-7.0.5.jar
+/home/runner/.gradle/caches/modules-2/files-2.1/net.minecraftforge/fmlloader/26.2-65.1.5/7dcca1a4881aa8dd6a35ddeb472944ee39ae9d33/fmlloader-26.2-65.1.5.jar
+/home/runner/.gradle/caches/modules-2/files-2.1/net.minecraftforge/javafmllanguage/26.2-65.1.5/ab741af00f5bbb9fb3e861ea5216371dae456393/javafmllanguage-26.2-65.1.5.jar
+/tmp/mdk/.gradle/mavenizer/repo/net/minecraftforge/forge/26.2-65.1.5/forge-26.2-65.1.5.jar

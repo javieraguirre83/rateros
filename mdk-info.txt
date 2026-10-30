@@ -1,0 +1,324 @@
+### Archivos
+./.gitattributes
+./.gitignore
+./LICENSE.txt
+./build.gradle
+./changelog.txt
+./gradle.properties
+./gradle/wrapper/gradle-wrapper.jar
+./gradle/wrapper/gradle-wrapper.properties
+./gradlew
+./gradlew.bat
+./settings.gradle
+./src/main/java/com/example/examplemod/Config.java
+./src/main/java/com/example/examplemod/ExampleMod.java
+./src/main/resources/META-INF/mods.toml
+./src/main/resources/pack.mcmeta
+
+### gradle.properties
+org.gradle.caching=true
+org.gradle.parallel=true
+org.gradle.configureondemand=true
+
+org.gradle.configuration-cache=true
+org.gradle.configuration-cache.parallel=true
+org.gradle.configuration-cache.problems=warn
+
+net.minecraftforge.gradle.merge-source-sets=true
+
+### build.gradle
+// This is a minimal setup of a Forge mod workspace.
+// For complex examples (including AccessTransformers, Jar-in-Jar, and Mixin), see our examples repository.
+// https://github.com/MinecraftForge/MDKExamples
+
+plugins {
+    id 'java'
+    id 'idea'
+    id 'eclipse'
+    id 'net.minecraftforge.gradle' version '[7.0.17,8)'
+}
+
+version = '1.0.0'
+group = 'com.example.examplemod'
+
+// Mojang ships Java 25 to end users in 26.1+, so your mod should target Java 25.
+java.toolchain.languageVersion = JavaLanguageVersion.of(25)
+
+// Include generated resources
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+minecraft {
+    runs {
+        configureEach {
+            workingDir = layout.projectDirectory.dir('run')
+
+            systemProperty 'eventbus.api.strictRuntimeChecks', 'true'
+            systemProperty 'forge.enabledGameTestNamespaces', 'examplemod'
+        }
+
+        register('client')
+
+        register('server') {
+            args '--nogui'
+        }
+
+        register('gameTestServer')
+
+        register('data') {
+            workingDir = layout.projectDirectory.dir('run-data')
+
+            args '--mod', 'examplemod', '--all', '--output', layout.projectDirectory.dir('src/generated/resources'), '--existing', layout.projectDirectory.dir('src/main/resources')
+        }
+    }
+}
+
+repositories {
+    minecraft.mavenizer(it) // In Kotlin, it = this
+    maven fg.forgeMaven
+    maven fg.minecraftLibsMaven
+    mavenCentral()
+}
+
+dependencies {
+    implementation minecraft.dependency('net.minecraftforge:forge:26.2-65.1.5')
+    annotationProcessor 'net.minecraftforge:eventbus-validator:7.0.5'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    // Use the UTF-8 charset for Java compilation
+    // This is done by default in Java 18+, but this ensures it no matter the Java or Gradle version
+    options.encoding = 'UTF-8'
+}
+
+### settings.gradle
+plugins {
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '1.0.0'
+}
+
+rootProject.name = 'examplemod'
+
+### src/main/resources/META-INF/mods.toml
+# See https://docs.minecraftforge.net/en/1.21.x/gettingstarted/modfiles/#modstoml
+# There are lots of things you can do with the mods.toml, and not all fields are included with this MDK
+# References: https://github.com/MinecraftForge/MDKExamples
+
+modLoader="javafml"
+loaderVersion="[65,)"
+license="All Rights Reserved"
+#issueTrackerURL="https://github.com/MyOrganization/MyMod/" #optional
+#clientSideOnly=true #optional, default=false
+
+[[mods]]
+modId="examplemod"
+version="1.0.0"
+displayName="Example Mod"
+#updateJSONURL="https://example.com/updates.json" #optional
+#displayURL="https://example.com/" #optional
+#logoFile="examplemod.png" #optional
+#credits="" #optional
+authors="YourNameHere, OtherNameHere" #optional
+#displayTest="MATCH_VERSION" #optional, default=MATCH_VERSION when not clientSideOnly, else IGNORE_ALL_VERSION
+
+description='''Example mod description.
+Newline characters can be used like this, and rendered on the mods screen properly.'''
+
+[[dependencies.examplemod]] #recommended
+    modId="forge"
+    mandatory=true
+    versionRange="[65,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.examplemod]] #recommended
+    modId="minecraft"
+    mandatory=true
+    versionRange="[26.2,26.3,)"
+    ordering="NONE"
+    side="BOTH"
+
+### Código de ejemplo
+---- /tmp/mdk/src/main/java/com/example/examplemod/ExampleMod.java
+package com.example.examplemod;
+
+import com.mojang.logging.LogUtils;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
+import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
+import org.slf4j.Logger;
+
+// The value here should match an entry in the META-INF/mods.toml file
+@Mod(ExampleMod.MODID)
+public final class ExampleMod {
+    // Define mod id in a common place for everything to reference
+    public static final String MODID = "examplemod";
+    // Directly reference a slf4j logger
+    private static final Logger LOGGER = LogUtils.getLogger();
+    // Create a Deferred Register to hold Blocks which will all be registered under the "examplemod" namespace
+    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MODID);
+    // Create a Deferred Register to hold Items which will all be registered under the "examplemod" namespace
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
+    // Create a Deferred Register to hold CreativeModeTabs which will all be registered under the "examplemod" namespace
+    public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
+
+    // Creates a new Block with the id "examplemod:example_block", combining the namespace and path
+    public static final RegistryObject<Block> EXAMPLE_BLOCK = BLOCKS.register("example_block",
+        () -> new Block(BlockBehaviour.Properties.of()
+            .setId(BLOCKS.key("example_block"))
+            .mapColor(MapColor.STONE)
+        )
+    );
+    // Creates a new BlockItem with the id "examplemod:example_block", combining the namespace and path
+    public static final RegistryObject<Item> EXAMPLE_BLOCK_ITEM = ITEMS.register("example_block",
+        () -> new BlockItem(EXAMPLE_BLOCK.get(), new Item.Properties().setId(ITEMS.key("example_block")))
+    );
+
+    // Creates a new food item with the id "examplemod:example_id", nutrition 1 and saturation 2
+    public static final RegistryObject<Item> EXAMPLE_ITEM = ITEMS.register("example_item",
+        () -> new Item(new Item.Properties()
+            .setId(ITEMS.key("example_item"))
+            .food(new FoodProperties.Builder()
+                .alwaysEdible()
+                .nutrition(1)
+                .saturationModifier(2f)
+                .build()
+            )
+        )
+    );
+
+    // Creates a creative tab with the id "examplemod:example_tab" for the example item, that is placed after the combat tab
+    public static final RegistryObject<CreativeModeTab> EXAMPLE_TAB = CREATIVE_MODE_TABS.register("example_tab", () -> CreativeModeTab.builder()
+            .withTabsBefore(CreativeModeTabs.COMBAT)
+            .icon(() -> EXAMPLE_ITEM.get().getDefaultInstance())
+            .displayItems((_, output) -> {
+                output.accept(EXAMPLE_ITEM.get()); // Add the example item to the tab. For your own tabs, this method is preferred over the event
+            }).build());
+
+    public ExampleMod(FMLJavaModLoadingContext context) {
+        var modBusGroup = context.getModBusGroup();
+
+        // Register the commonSetup method for modloading
+        FMLCommonSetupEvent.getBus(modBusGroup).addListener(this::commonSetup);
+
+        // Register the Deferred Register to the mod event bus so blocks get registered
+        BLOCKS.register(modBusGroup);
+        // Register the Deferred Register to the mod event bus so items get registered
+        ITEMS.register(modBusGroup);
+        // Register the Deferred Register to the mod event bus so tabs get registered
+        CREATIVE_MODE_TABS.register(modBusGroup);
+
+        // Register the item to a creative tab
+        BuildCreativeModeTabContentsEvent.BUS.addListener(ExampleMod::addCreative);
+
+        // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
+        context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+    }
+
+    private void commonSetup(final FMLCommonSetupEvent event) {
+        // Some common setup code
+        LOGGER.info("HELLO FROM COMMON SETUP");
+
+        if (Config.logDirtBlock)
+            LOGGER.info("DIRT BLOCK >> {}", ForgeRegistries.BLOCKS.getKey(Blocks.DIRT));
+
+        LOGGER.info(Config.magicNumberIntroduction + Config.magicNumber);
+
+        Config.items.forEach((item) -> LOGGER.info("ITEM >> {}", item.toString()));
+    }
+
+    // Add the example block item to the building blocks tab
+    private static void addCreative(BuildCreativeModeTabContentsEvent event) {
+        if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS)
+            event.accept(EXAMPLE_BLOCK_ITEM);
+    }
+
+    // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
+    @Mod.EventBusSubscriber(modid = MODID, value = Dist.CLIENT)
+    public static class ClientModEvents {
+        @SubscribeEvent
+        public static void onClientSetup(FMLClientSetupEvent event) {
+            // Some client setup code
+            LOGGER.info("HELLO FROM CLIENT SETUP");
+            LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
+        }
+    }
+}
+---- /tmp/mdk/src/main/java/com/example/examplemod/Config.java
+package com.example.examplemod;
+
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.Item;
+import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
+import net.minecraftforge.registries.ForgeRegistries;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+// An example config class. This is not required, but it's a good idea to have one to keep your config organized.
+// Demonstrates how to use Forge's config APIs
+@Mod.EventBusSubscriber(modid = ExampleMod.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+public class Config {
+    private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
+
+    private static final ForgeConfigSpec.BooleanValue LOG_DIRT_BLOCK = BUILDER
+            .comment("Whether to log the dirt block on common setup")
+            .define("logDirtBlock", true);
+
+    private static final ForgeConfigSpec.IntValue MAGIC_NUMBER = BUILDER
+            .comment("A magic number")
+            .defineInRange("magicNumber", 42, 0, Integer.MAX_VALUE);
+
+    public static final ForgeConfigSpec.ConfigValue<String> MAGIC_NUMBER_INTRODUCTION = BUILDER
+            .comment("What you want the introduction message to be for the magic number")
+            .define("magicNumberIntroduction", "The magic number is... ");
+
+    // a list of strings that are treated as resource locations for items
+    private static final ForgeConfigSpec.ConfigValue<List<? extends String>> ITEM_STRINGS = BUILDER
+            .comment("A list of items to log on common setup.")
+            .defineListAllowEmpty("items", List.of("minecraft:iron_ingot"), Config::validateItemName);
+
+    static final ForgeConfigSpec SPEC = BUILDER.build();
+
+    public static boolean logDirtBlock;
+    public static int magicNumber;
+    public static String magicNumberIntroduction;
+    public static Set<Item> items;
+
+    private static boolean validateItemName(final Object obj) {
+        return obj instanceof final String itemName && ForgeRegistries.ITEMS.containsKey(Identifier.tryParse(itemName));
+    }
+
+    @SubscribeEvent
+    static void onLoad(final ModConfigEvent event) {
+        logDirtBlock = LOG_DIRT_BLOCK.get();
+        magicNumber = MAGIC_NUMBER.get();
+        magicNumberIntroduction = MAGIC_NUMBER_INTRODUCTION.get();
+
+        // convert the list of strings into a set of items
+        items = ITEM_STRINGS.get().stream()
+                .map(itemName -> ForgeRegistries.ITEMS.getValue(Identifier.tryParse(itemName)))
+                .collect(Collectors.toSet());
+    }
+}

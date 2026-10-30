@@ -1,0 +1,3 @@
+BUILD SUCCESSFUL in 3m 58s
+3 actionable tasks: 3 executed
+Configuration cache entry stored.
