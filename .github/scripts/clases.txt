@@ -4,3 +4,5 @@ net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal
 net.minecraft.tags.EnchantmentTags
 net.minecraft.world.level.LevelReader
 net.minecraft.world.level.EntityGetter
+net.minecraft.server.level.ServerPlayer$RespawnConfig
+net.minecraft.world.level.storage.LevelData$RespawnData

@@ -69,5 +69,6 @@
   "rateros.aj.niveles_ayuda": "Gang size and weapons depend on the best you have obtained (ingots, blocks or gems in your inventory, ender chest or nearby chests): nothing = 2 thieves; iron or lapis = 2-3; gold, emerald or redstone = 3-4; diamond = 4-6 and maybe the boss; netherite = 5-8 with boss. Some gangs (the % above) come from a random lower level. They never carry enchantments. The table is edited in the file (button below).",
   "rateros.pantalla.restaurar": "Restore original values",
   "rateros.pantalla.restaurado": "Original values restored (the raids switch stays as it was).",
-  "rateros.aj.probMenor": "% gangs of a lower level"
+  "rateros.aj.probMenor": "% gangs of a lower level",
+  "rateros.aj.buscarCama": "Find your bed if they smell nothing"
 }

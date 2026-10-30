@@ -200,13 +200,15 @@ public class PantallaAjustes extends Screen {
                 etiqueta(3, "rateros.aj.distanciaEscape");
                 numero(3, x, 50, "distanciaEscape", 96, 1, true);
                 etiqueta(4, "rateros.aj.radioOlfato");
-                numero(4, x, 50, "radioOlfato", 48, 1, true);
+                numero(4, x, 50, "radioOlfato", 96, 1, true);
             }
             case ENTRADA -> {
                 etiqueta(0, "rateros.aj.romperBloques");
                 interruptor(0, x, w, "romperBloques", null);
                 etiqueta(1, "rateros.aj.segundosRomper");
                 numero(1, x, 50, "segundosRomper", 4, 1, true);
+                etiqueta(2, "rateros.aj.buscarCama");
+                interruptor(2, x, w, "buscarCama", null);
                 int w2 = (der - izq) / 2;
                 addRenderableWidget(Button.builder(Component.translatable("rateros.pantalla.carpeta"), b -> abrirCarpeta())
                         .bounds(izq, height - 56, w2 - 2, 20).build());
@@ -249,7 +251,7 @@ public class PantallaAjustes extends Screen {
             case HURTO -> {
                 g.textWithWordWrap(font, gris.apply("rateros.aj.hurto_ayuda"), izq, fila(5) + 2, der - izq, -1);
             }
-            case ENTRADA -> g.textWithWordWrap(font, gris.apply("rateros.aj.listas_ayuda"), izq, fila(2) + 6, der - izq, -1);
+            case ENTRADA -> g.textWithWordWrap(font, gris.apply("rateros.aj.listas_ayuda"), izq, fila(3) + 6, der - izq, -1);
         }
         if (aviso != null && System.currentTimeMillis() < avisoHasta) {
             g.centeredText(font, aviso.copy().withStyle(ChatFormatting.YELLOW), width / 2, height - 14, -1);

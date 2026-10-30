@@ -35,7 +35,9 @@ public final class Ajustes {
     /** Rob village and structure chests too (already opened ones; never fresh loot chests). */
     public static boolean asaltarAldeas = true;
     /** Radius (blocks) in which they sniff out loot. */
-    public static int radioOlfato = 48;
+    public static int radioOlfato = 96;
+    /** If they smell nothing, they walk to the bed (respawn point) of the nearest player and sniff there. */
+    public static boolean buscarCama = true;
 
     // ---------- the gang ----------
     public static int maxBanda = 8;
@@ -185,7 +187,7 @@ public final class Ajustes {
     // ---------- load / save ----------
 
     /** Version of the file format: 2 = gangs by unlocked level (1.1.0). */
-    private static final int VERSION = 2;
+    private static final int VERSION = 3;
     /** The original values, to go back to them. */
     private static final JsonObject DEFECTO = aJson();
 
@@ -205,7 +207,10 @@ public final class Ajustes {
                     if (j != null) {
                         aplicar(j);
                         // Files from 1.0.x: the escape distance changed meaning (it is now the only escape rule)
-                        if (entero(j, "_version", 1, 1, 1000) < 2 && distanciaEscape == 48) distanciaEscape = 96;
+                        int version = entero(j, "_version", 1, 1, 1000);
+                        if (version < 2 && distanciaEscape == 48) distanciaEscape = 96;
+                        // 1.1.2: they smell farther (the old default was too short to find your home)
+                        if (version < 3 && radioOlfato == 48) radioOlfato = 96;
                     }
                 }
             }
@@ -244,6 +249,7 @@ public final class Ajustes {
         j.addProperty("aviso", aviso);
         j.addProperty("asaltarAldeas", asaltarAldeas);
         j.addProperty("radioOlfato", radioOlfato);
+        j.addProperty("buscarCama", buscarCama);
         j.addProperty("maxBanda", maxBanda);
         j.addProperty("rolLadron", rolLadron);
         j.addProperty("rolBallestero", rolBallestero);
@@ -314,7 +320,8 @@ public final class Ajustes {
         diaAvanzado = entero(j, "diaAvanzado", diaAvanzado, 1, 100000);
         aviso = bool(j, "aviso", aviso);
         asaltarAldeas = bool(j, "asaltarAldeas", asaltarAldeas);
-        radioOlfato = entero(j, "radioOlfato", radioOlfato, 8, 128);
+        radioOlfato = entero(j, "radioOlfato", radioOlfato, 8, 192);
+        buscarCama = bool(j, "buscarCama", buscarCama);
         maxBanda = entero(j, "maxBanda", maxBanda, 1, 32);
         rolLadron = bool(j, "rolLadron", rolLadron);
         rolBallestero = bool(j, "rolBallestero", rolBallestero);

@@ -34,7 +34,7 @@ echo "MDK en $MDK"
 if [ -d "$REPO/src/main" ]; then
   rm -rf "$MDK/src/main/java/com/example"
   cp -r "$REPO/src/." "$MDK/src/"
-  sed -i -E "s/^version = .*/version = '1.1.1-forge-26.2'/; s/^group = .*/group = 'rateros'/; s/examplemod/rateros/g" "$MDK/build.gradle"
+  sed -i -E "s/^version = .*/version = '1.1.2-forge-26.2'/; s/^group = .*/group = 'rateros'/; s/examplemod/rateros/g" "$MDK/build.gradle"
   printf "\ntasks.withType(JavaCompile).configureEach { options.compilerArgs += ['-Xmaxerrs', '1000'] }\n" >> "$MDK/build.gradle"
   sed -i -E "s/^rootProject.name = .*/rootProject.name = 'Rateros'/" "$MDK/settings.gradle"
   if [ -f "$REPO/mod.properties" ]; then

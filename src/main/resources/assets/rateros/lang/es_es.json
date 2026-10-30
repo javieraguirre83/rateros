@@ -69,5 +69,6 @@
   "rateros.aj.niveles_ayuda": "El tamaño de la banda y sus armas dependen de lo mejor que hayas conseguido (lingotes, bloques o gemas en tu inventario, tu cofre de ender o tus cofres cercanos): nada = 2 ladrones; hierro o lapislázuli = 2-3; oro, esmeralda o redstone = 3-4; diamante = 4-6 y quizá el jefe; netherita = 5-8 con jefe. Algunas bandas (el % de arriba) son de un nivel menor al azar. Nunca traen encantamientos. La tabla se edita en el archivo (botón de abajo).",
   "rateros.pantalla.restaurar": "Restaurar valores originales",
   "rateros.pantalla.restaurado": "Valores originales restaurados (el interruptor de asaltos se queda como estaba).",
-  "rateros.aj.probMenor": "% de bandas de nivel menor"
+  "rateros.aj.probMenor": "% de bandas de nivel menor",
+  "rateros.aj.buscarCama": "Buscan tu cama si no huelen nada"
 }
