@@ -22,6 +22,7 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.illager.Pillager;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.ItemStack;
@@ -134,6 +135,19 @@ public class Ratero extends Pillager implements ContainerUser {
         return huyendo;
     }
 
+    /** How close (blocks) you must stay for a fleeing bandit you hit to keep fighting back. */
+    private static final double DEFENSA = 6.0;
+
+    /**
+     * A fleeing bandit that you hit fights back while you stay close (and it was hit in the last 10 seconds);
+     * as soon as you step away, it runs off with the loot again.
+     */
+    public boolean defendiendo() {
+        LivingEntity t = getTarget();
+        if (!huyendo || t == null || !t.isAlive() || t != getLastHurtByMob()) return false;
+        return tickCount - getLastHurtByMobTimestamp() < 200 && distanceToSqr(t) < DEFENSA * DEFENSA;
+    }
+
     public void huir() {
         if (huyendo) return;
         huyendo = true;
@@ -182,6 +196,8 @@ public class Ratero extends Pillager implements ContainerUser {
         if (!huyendo && ticksVida > 20 * 60 * 5 && getTarget() == null) huir();
         // Only distance lets them escape: if you keep up with them, they never get away
         if (huyendo) {
+            // Not defending any more: forget the fight and keep running
+            if (getTarget() != null && !defendiendo()) setTarget(null);
             ticksHuyendo++;
             if (ticksHuyendo % 20 == 0 && lejosDeTodos()) escapar();
         }

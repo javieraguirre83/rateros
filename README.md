@@ -4,7 +4,7 @@ Bandas de **rateros** que buscan y roban tus **cosas ya trabajadas**: lingotes, 
 
 ## ⬇️ Descargar
 
-**[Descargar el mod (.jar)](https://github.com/javieraguirre83/rateros/releases/download/ultima/Rateros-1.1.2-forge-26.2.jar)**
+**[Descargar el mod (.jar)](https://github.com/javieraguirre83/rateros/releases/download/ultima/Rateros-1.1.3-forge-26.2.jar)**
 
 1. Descarga el archivo `.jar`.
 2. Abre la carpeta `mods`:
@@ -61,7 +61,7 @@ El tamaño de la banda y sus armas dependen del **material más valioso que haya
 - **No pueden abrir el cofre de ender:** es tu lugar seguro.
 - **Cofre trampa:** al abrirlo un ratero, **se activa la redstone**, igual que contigo. ¡Pon trampas!
 - No tocan cofres de estructuras que todavía no has abierto.
-- Cuando se llenan (o si los lastimas mucho), **huyen**, un poco más lento que tú corriendo. **Si los matas, sueltan todo lo que robaron.** Si te sacan **96 bloques de ventaja**, **escapan** y lo robado se pierde. Mientras los persigas de cerca, no se te escapan.
+- Cuando se llenan (o si los lastimas mucho), **huyen**, un poco más lento que tú corriendo. Si alcanzas a uno y **le pegas, se defiende** mientras sigas cerca; si te alejas, vuelve a huir. **Si los matas, sueltan todo lo que robaron.** Si te sacan **96 bloques de ventaja**, **escapan** y lo robado se pierde. Mientras los persigas de cerca, no se te escapan.
 - **Si te matan:** siguen robando, **recogen lo que soltaste** y luego huyen. Mientras estás en la pantalla de "Has muerto", la ventaja se cuenta desde donde moriste; si tardas en reaparecer, se te van. Cuidado: si reapareces cerca, te pueden volver a atacar.
 - El jefe, al morir, suelta además unas esmeraldas.
 - Si en 5 minutos no encuentran nada que robar, se van.

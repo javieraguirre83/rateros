@@ -21,7 +21,8 @@ public class HuirGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        return ratero.isHuyendo();
+        // While it is fighting back someone who hit it, the attack goal takes over
+        return ratero.isHuyendo() && !ratero.defendiendo();
     }
 
     @Override
