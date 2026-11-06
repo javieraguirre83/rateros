@@ -4,7 +4,7 @@ Bandas de **rateros** que buscan y roban tus **cosas ya trabajadas**: lingotes, 
 
 ## ⬇️ Descargar
 
-**[Descargar el mod (.jar)](https://github.com/javieraguirre83/rateros/releases/download/ultima/Rateros-1.1.3-forge-26.2.jar)**
+**[Descargar el mod (.jar)](https://github.com/javieraguirre83/rateros/releases/download/ultima/Rateros-1.1.4-forge-26.2.jar)**
 
 1. Descarga el archivo `.jar`.
 2. Abre la carpeta `mods`:
@@ -38,6 +38,7 @@ El tamaño de la banda y sus armas dependen del **material más valioso que haya
 
 - **De vez en cuando llega una banda más chica:** el **30%** de las veces, en lugar de la de tu nivel llega una de cualquier nivel más bajo (al azar). Así, aunque ya tengas diamante, a veces te caen 2 ladrones. Se cambia con `probMenor`.
 - **Nunca traen armas encantadas.**
+- **Daño:** sin arma pegan 2 (1 corazón); el arma suma lo suyo. Con espada de piedra pegan unos 3 corazones y con hierro 3.5. Se ajusta con `dano` (en %, 100 = normal) y aplica a las bandas que lleguen después del cambio.
 - Con `/rateros` ves en qué nivel vas.
 - La tabla se puede cambiar en el archivo de ajustes (ver abajo).
 
@@ -84,7 +85,7 @@ El tamaño de la banda y sus armas dependen del **material más valioso que haya
 Presiona **Z** en el juego. Se cambia en **Opciones → Controles → Asignación de teclas → Rateros**. Tiene 4 pestañas y **cada cambio se guarda solo**:
 
 - **General:** activar o desactivar, horario, cuánto más probable de noche, % de banda por día (inicio y avanzado), día de mundo avanzado, aviso, si roban en aldeas. Abajo: **Restaurar valores originales** (deja el interruptor de asaltos como esté).
-- **La banda:** máximo de rateros, qué roles pueden venir, **en qué nivel vas** y el % de bandas de nivel menor.
+- **La banda:** máximo de rateros, qué roles pueden venir, **en qué nivel vas** el % de bandas de nivel menor y el daño de sus golpes.
 - **El robo:** nivel de hurto, cuánto carga cada rol, % de ir por lo valioso de cada rol, ventaja en bloques para escapar y radio en el que olfatean.
 - **Cómo entran:** si rompen bloques, cuánto tardan y si buscan tu cama cuando no huelen nada. Abajo: **Abrir carpeta de ajustes** y **Recargar archivo**.
 

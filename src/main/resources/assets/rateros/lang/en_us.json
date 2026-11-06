@@ -70,5 +70,6 @@
   "rateros.pantalla.restaurar": "Restore original values",
   "rateros.pantalla.restaurado": "Original values restored (the raids switch stays as it was).",
   "rateros.aj.probMenor": "% gangs of a lower level",
-  "rateros.aj.buscarCama": "Find your bed if they smell nothing"
+  "rateros.aj.buscarCama": "Find your bed if they smell nothing",
+  "rateros.aj.dano": "Damage (%)"
 }

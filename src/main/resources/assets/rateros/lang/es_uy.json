@@ -70,5 +70,6 @@
   "rateros.pantalla.restaurar": "Restaurar valores originales",
   "rateros.pantalla.restaurado": "Valores originales restaurados (el interruptor de asaltos se queda como estaba).",
   "rateros.aj.probMenor": "% de bandas de nivel menor",
-  "rateros.aj.buscarCama": "Buscan tu cama si no huelen nada"
+  "rateros.aj.buscarCama": "Buscan tu cama si no huelen nada",
+  "rateros.aj.dano": "Daño de sus golpes (%)"
 }

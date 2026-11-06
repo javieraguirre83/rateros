@@ -220,6 +220,12 @@ public final class Bandas {
             default -> espada(material);
         });
         ratero.setItemSlot(EquipmentSlot.MAINHAND, arma);
+        if (Ajustes.dano != 100) {
+            // Scales the total (bare hands + weapon)
+            AttributeInstance golpe = ratero.getAttribute(Attributes.ATTACK_DAMAGE);
+            if (golpe != null) golpe.addPermanentModifier(new AttributeModifier(Identifier.fromNamespaceAndPath(Rateros.MODID, "dano"),
+                    Ajustes.dano / 100.0 - 1.0, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        }
         boolean caro = material.equals("diamante") || material.equals("netherita");
         ratero.setDropChance(EquipmentSlot.MAINHAND, caro ? 0.02F : 0.085F);
         if (rol == Rol.JEFE) {

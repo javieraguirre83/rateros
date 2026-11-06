@@ -13,6 +13,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.ContainerUser;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
@@ -57,8 +58,11 @@ public class Ratero extends Pillager implements ContainerUser {
         setCanPickUpLoot(true);
     }
 
+    /** Bare-handed damage (a pillager has 5; with a sword on top that was far too much). Weapons add theirs. */
+    public static final double DANO_BASE = 2.0;
+
     public static AttributeSupplier.Builder crearAtributos() {
-        return Pillager.createAttributes();
+        return Pillager.createAttributes().add(Attributes.ATTACK_DAMAGE, DANO_BASE);
     }
 
     @Override
