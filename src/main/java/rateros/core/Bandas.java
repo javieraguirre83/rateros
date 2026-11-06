@@ -116,7 +116,9 @@ public final class Bandas {
         BlockPos donde = lugar(level, player.blockPosition(), r);
         if (donde == null) return 0;
         int llegaron = 0;
-        for (Rol rol : roles(n, nivel, r)) {
+        String banda = java.util.UUID.randomUUID().toString();
+        List<Rol> lista = roles(n, nivel, r);
+        for (Rol rol : lista) {
             Ratero ratero = Rateros.RATERO.get().create(level, EntitySpawnReason.EVENT);
             if (ratero == null) continue;
             // Spread them a little around the spot, each one on valid ground
@@ -133,6 +135,7 @@ public final class Bandas {
             ratero.setPatrolLeader(false);
             ratero.setCanJoinRaid(false);
             ratero.setRol(rol);
+            ratero.setBanda(banda, lista.size());
             equipar(ratero, rol, nivel, r);
             level.addFreshEntity(ratero);
             llegaron++;

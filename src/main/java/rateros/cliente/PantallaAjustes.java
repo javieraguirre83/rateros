@@ -203,6 +203,8 @@ public class PantallaAjustes extends Screen {
                 numero(3, x, 50, "distanciaEscape", 96, 1, true);
                 etiqueta(4, "rateros.aj.radioOlfato");
                 numero(4, x, 50, "radioOlfato", 96, 1, true);
+                etiqueta(5, "rateros.aj.ladronesHuyen");
+                interruptor(5, x, 60, "ladronesHuyen", null);
             }
             case ENTRADA -> {
                 etiqueta(0, "rateros.aj.romperBloques");
@@ -251,7 +253,7 @@ public class PantallaAjustes extends Screen {
                 g.textWithWordWrap(font, gris.apply("rateros.aj.niveles_ayuda"), izq, fila(5) + 6, der - izq, -1);
             }
             case HURTO -> {
-                g.textWithWordWrap(font, gris.apply("rateros.aj.hurto_ayuda"), izq, fila(5) + 2, der - izq, -1);
+                g.textWithWordWrap(font, gris.apply("rateros.aj.hurto_ayuda"), izq, fila(6) + 2, der - izq, -1);
             }
             case ENTRADA -> g.textWithWordWrap(font, gris.apply("rateros.aj.listas_ayuda"), izq, fila(3) + 6, der - izq, -1);
         }

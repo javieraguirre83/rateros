@@ -50,6 +50,11 @@ public class Ratero extends Pillager implements ContainerUser {
     private boolean huyendo = false;
     private int ticksHuyendo = 0;
     private int ticksVida = 0;
+    /** tickCount when it started fleeing: only hits after that make it fight back. */
+    private int huidaTick = 0;
+    /** Its gang (all bandits that arrived together) and how many they were. */
+    private String banda = "";
+    private int tamBanda = 0;
     /** Container it is opening right now (for the lid animation and trapped chests). */
     BlockPos abiertoEn = null;
 
@@ -149,6 +154,7 @@ public class Ratero extends Pillager implements ContainerUser {
     public boolean defendiendo() {
         LivingEntity t = getTarget();
         if (!huyendo || t == null || !t.isAlive() || t != getLastHurtByMob()) return false;
+        if (getLastHurtByMobTimestamp() <= huidaTick) return false;   // the hit that made it run does not count
         return tickCount - getLastHurtByMobTimestamp() < 200 && distanceToSqr(t) < DEFENSA * DEFENSA;
     }
 
@@ -156,7 +162,34 @@ public class Ratero extends Pillager implements ContainerUser {
         if (huyendo) return;
         huyendo = true;
         ticksHuyendo = 0;
+        huidaTick = tickCount;
         setTarget(null);
+    }
+
+    public void setBanda(String id, int tamano) {
+        banda = id;
+        tamBanda = tamano;
+    }
+
+    /** When the boss falls, or half the gang is gone, the rest run off with what they have. */
+    @Override
+    public void die(DamageSource source) {
+        super.die(source);
+        if (!(level() instanceof ServerLevel server) || banda.isEmpty() || tamBanda <= 0) return;
+        List<Ratero> resto = server.getEntitiesOfClass(Ratero.class, getBoundingBox().inflate(160),
+                r -> r != this && r.isAlive() && banda.equals(r.banda));
+        int caidos = tamBanda - resto.size();
+        if (resto.isEmpty() || (getRol() != Rol.JEFE && caidos * 2 < tamBanda)) return;
+        boolean alguno = false;
+        for (Ratero r : resto) {
+            if (!r.huyendo) alguno = true;
+            r.huir();
+        }
+        if (!alguno) return;
+        Component msg = Component.translatable("rateros.desbandada").withStyle(ChatFormatting.GOLD);
+        for (ServerPlayer p : server.players()) {
+            if (p.distanceToSqr(this) < 64 * 64) p.sendSystemMessage(msg);
+        }
     }
 
     // Items lying on the ground count as loot too
@@ -196,6 +229,12 @@ public class Ratero extends Pillager implements ContainerUser {
         if (level().isClientSide() || !isAlive()) return;
         ticksVida++;
         if (getHealth() < getMaxHealth() * 0.35F && tomados > 0) huir();
+        if (Ajustes.ladronesHuyen && getRol() == Rol.LADRON && !huyendo) {
+            // Caught red-handed: a thief runs (it only fights back if you catch up and hit it again)
+            if (getLastHurtByMob() != null && tickCount - getLastHurtByMobTimestamp() < 5) huir();
+            // Called by the gang to fight: it keeps stealing instead
+            else if (getTarget() != null) setTarget(null);
+        }
         // Nothing to steal for a long time: the gang leaves
         if (!huyendo && ticksVida > 20 * 60 * 5 && getTarget() == null) huir();
         // Only distance lets them escape: if you keep up with them, they never get away
@@ -284,6 +323,8 @@ public class Ratero extends Pillager implements ContainerUser {
         out.putBoolean("Huyendo", huyendo);
         out.putInt("TicksHuyendo", ticksHuyendo);
         out.putInt("TicksVida", ticksVida);
+        out.putString("Banda", banda);
+        out.putInt("TamBanda", tamBanda);
         botin.storeAsItemList(out.list("Botin", ItemStack.CODEC));
     }
 
@@ -295,6 +336,8 @@ public class Ratero extends Pillager implements ContainerUser {
         huyendo = in.getBooleanOr("Huyendo", false);
         ticksHuyendo = in.getIntOr("TicksHuyendo", 0);
         ticksVida = in.getIntOr("TicksVida", 0);
+        banda = in.getStringOr("Banda", "");
+        tamBanda = in.getIntOr("TamBanda", 0);
         botin.fromItemList(in.listOrEmpty("Botin", ItemStack.CODEC));
     }
 

@@ -71,5 +71,7 @@
   "rateros.pantalla.restaurado": "Original values restored (the raids switch stays as it was).",
   "rateros.aj.probMenor": "% gangs of a lower level",
   "rateros.aj.buscarCama": "Find your bed if they smell nothing",
-  "rateros.aj.dano": "Damage (%)"
+  "rateros.aj.dano": "Damage (%)",
+  "rateros.aj.ladronesHuyen": "Thieves run if caught",
+  "rateros.desbandada": "The gang breaks up and runs!"
 }

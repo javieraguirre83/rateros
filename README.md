@@ -4,7 +4,7 @@ Bandas de **rateros** que buscan y roban tus **cosas ya trabajadas**: lingotes, 
 
 ## ⬇️ Descargar
 
-**[Descargar el mod (.jar)](https://github.com/javieraguirre83/rateros/releases/download/ultima/Rateros-1.1.4-forge-26.2.jar)**
+**[Descargar el mod (.jar)](https://github.com/javieraguirre83/rateros/releases/download/ultima/Rateros-1.1.5-forge-26.2.jar)**
 
 1. Descarga el archivo `.jar`.
 2. Abre la carpeta `mods`:
@@ -50,7 +50,9 @@ El tamaño de la banda y sus armas dependen del **material más valioso que haya
 | 🟣 **Jefe** (desde el nivel diamante) | Espada, peto, doble de vida | 4 montones | 50% |
 
 - Cada rol tiene su ropa: pañuelo en la cara, chaleco y un **costal en la espalda**. El jefe trae abrigo largo morado con dorado.
-- Los **ladrones** no te atacan solos, pero si le pegas a cualquier ratero, **toda la banda** va contra ti. Los demás pelean en cuanto te ven.
+- Los **ladrones** no pelean: si le pegas a uno, **huye** (con lo que lleve) y avisa a los peleadores. Si lo alcanzas y le vuelves a pegar, se defiende. Se puede cambiar con `ladronesHuyen` para que peleen como los demás.
+- Los **peleadores** (ballestero, forzador, jefe) te atacan en cuanto te ven.
+- **Si cae el jefe o la mitad de la banda**, los que quedan **se desbandan y huyen** con lo que lleven.
 - Corren como un saqueador normal: **caminando no te les escapas, corriendo sí**.
 
 **El robo**

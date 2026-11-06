@@ -51,6 +51,8 @@ public final class Ajustes {
     public static int probMenor = 30;
     /** Damage of the bandits in % (100 = normal). Applies to gangs that arrive after the change. */
     public static int dano = 100;
+    /** A thief you hit runs away instead of fighting (it fights back only if you catch it and hit it again). */
+    public static boolean ladronesHuyen = true;
 
     /**
      * One gang level. tamano "3-4"; weapons by material (madera, piedra, hierro, diamante, netherita):
@@ -259,6 +261,7 @@ public final class Ajustes {
         j.addProperty("rolJefe", rolJefe);
         j.addProperty("probMenor", probMenor);
         j.addProperty("dano", dano);
+        j.addProperty("ladronesHuyen", ladronesHuyen);
         JsonArray ns = new JsonArray();
         niveles.forEach(n -> ns.add(n.aJson()));
         j.add("niveles", ns);
@@ -332,6 +335,7 @@ public final class Ajustes {
         rolJefe = bool(j, "rolJefe", rolJefe);
         probMenor = entero(j, "probMenor", probMenor, 0, 100);
         dano = entero(j, "dano", dano, 10, 500);
+        ladronesHuyen = bool(j, "ladronesHuyen", ladronesHuyen);
         if (j.has("niveles") && j.get("niveles").isJsonArray()) {
             List<Nivel> def = nivelesDefecto();
             List<Nivel> r = new ArrayList<>();

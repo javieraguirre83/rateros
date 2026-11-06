@@ -71,5 +71,7 @@
   "rateros.pantalla.restaurado": "Valores originales restaurados (el interruptor de asaltos se queda como estaba).",
   "rateros.aj.probMenor": "% de bandas de nivel menor",
   "rateros.aj.buscarCama": "Buscan tu cama si no huelen nada",
-  "rateros.aj.dano": "Daño de sus golpes (%)"
+  "rateros.aj.dano": "Daño de sus golpes (%)",
+  "rateros.aj.ladronesHuyen": "Ladrones huyen si los cachas",
+  "rateros.desbandada": "¡La banda se desbanda y huye!"
 }
