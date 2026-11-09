@@ -203,6 +203,8 @@ public class Ratero extends Pillager implements ContainerUser {
         ItemStack stack = entity.getItem();
         if (entity.getPersistentData().getBooleanOr(Rompedor.NO_TOMAR, false)) return;
         if (!wantsToPickUp(level, stack)) return;
+        // Not through a wall: it has to see the item
+        if (!hasLineOfSight(entity)) return;
         onItemPickup(entity);
         take(entity, stack.getCount());
         guardar(stack.copy());

@@ -4,7 +4,7 @@ Bandas de **rateros** que buscan y roban tus **cosas ya trabajadas**: lingotes, 
 
 ## ⬇️ Descargar
 
-**[Descargar el mod (.jar)](https://github.com/javieraguirre83/rateros/releases/download/ultima/Rateros-1.1.5-forge-26.2.jar)**
+**[Descargar el mod (.jar)](https://github.com/javieraguirre83/rateros/releases/download/ultima/Rateros-1.1.6-forge-26.2.jar)**
 
 1. Descarga el archivo `.jar`.
 2. Abre la carpeta `mods`:
@@ -23,10 +23,11 @@ Los textos salen en **español o inglés** según el idioma de tu Minecraft. El 
 - Al inicio del mundo, más o menos **1 de cada 5 días**; con los días va subiendo hasta **1 de cada 2** (día 60 en adelante).
 - Al llegar suena un **cuerno** y sale el aviso **"¡Se acercan rateros!"**.
 - Llega una banda a la vez, a unos 24-40 bloques de ti. No llegan en dificultad Pacífica ni fuera del mundo normal.
+- **Siempre llegan desde afuera:** aparecen sobre terreno natural (no en techos, pisos ni cultivos), nunca a menos de 12 bloques de cofres, hornos o camas, y nunca dentro de un área rodeada de muros o cercas. Si amurallas tu terreno, tienen que entrar por fuera.
 
 **La banda: según lo mejor que hayas conseguido**
 
-El tamaño de la banda y sus armas dependen del **material más valioso que hayas conseguido**. Cuenta lo que tengas en tu inventario, tu cofre de ender o los cofres cerca de ti, pero **solo lingotes, bloques y gemas**: armaduras, herramientas, pepitas y mineral crudo no cuentan. Cada nivel se **desbloquea para siempre** la primera vez, aunque luego te lo gastes.
+El tamaño de la banda y sus armas dependen del **material más valioso que hayas conseguido**. Cuenta lo que tengas en tu inventario, tu cofre de ender o los cofres cerca de tu cama (tu base; si no tienes cama, los que estén cerca de ti), pero **solo lingotes, bloques y gemas**: armaduras, herramientas, pepitas y mineral crudo no cuentan. Cada nivel se **desbloquea para siempre** la primera vez, aunque luego te lo gastes.
 
 | Lo mejor que has conseguido | Rateros por banda | Quiénes | Armas |
 |---|---|---|---|
@@ -56,6 +57,7 @@ El tamaño de la banda y sus armas dependen del **material más valioso que haya
 - Corren como un saqueador normal: **caminando no te les escapas, corriendo sí**.
 
 **El robo**
+- **No roban a través de paredes:** para abrir un cofre tienen que verlo, sin paredes, ventanas o pisos de por medio, igual que tú. Si no pueden llegar, intentan romper lo que estorba (solo bloques débiles); si es piedra o puerta de hierro, se rinden con ese cofre. Tampoco recogen cosas del piso a través de una pared.
 - **Olfatean** tus cosas hasta a **96 bloques** de donde están (configurable). Si no huelen nada, **caminan hacia tu cama** (tu punto de reaparición), que es donde suele estar tu casa, y ahí vuelven a olfatear. Esto se puede apagar.
 - Buscan **baúles, baúles dobles, barriles, hornos y cajas de shulker** con cosas trabajadas. Los **abren** (con su animación y su sonido), sacan cosas y los cierran.
 - **Todos roban de todo.** El rol solo cambia cuánto cargan y qué tan probable es que vayan por lo **valioso** (diamantes, esmeraldas, netherita, objetos encantados…). Un ladrón también puede llevarse un diamante, solo es menos probable.

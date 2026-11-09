@@ -34,12 +34,24 @@ public final class Niveles {
         int visto = mejorEn(player.getInventory(), actual);
         visto = Math.max(visto, mejorEn(player.getEnderChestInventory(), visto));
         if (visto < maximo && player.level() instanceof ServerLevel level) {
-            visto = Math.max(visto, mejorAlrededor(level, player.blockPosition(), visto));
+            visto = Math.max(visto, mejorAlrededor(level, base(player, level), visto));
         }
         if (visto > actual) {
             player.getPersistentData().putInt(CLAVE, visto);
             Rateros.LOGGER.info("Rateros: {} desbloqueo el nivel {} ({})", player.getName().getString(), visto, Ajustes.niveles.get(visto).nombre());
         }
+    }
+
+    /**
+     * Where "your chests" are: around your bed (your base). Without a bed in this dimension, around you.
+     * So an opened village or dungeon chest you walk past does not count as yours.
+     */
+    private static BlockPos base(ServerPlayer player, ServerLevel level) {
+        ServerPlayer.RespawnConfig cfg = player.getRespawnConfig();
+        if (cfg != null && cfg.respawnData() != null && cfg.respawnData().dimension().equals(level.dimension())) {
+            return cfg.respawnData().pos();
+        }
+        return player.blockPosition();
     }
 
     /** Level of the best material in a container, or "desde" if nothing better. */

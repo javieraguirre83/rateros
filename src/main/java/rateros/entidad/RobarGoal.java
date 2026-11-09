@@ -23,6 +23,9 @@ import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import rateros.core.Ajustes;
 import rateros.core.Botin;
@@ -143,8 +146,22 @@ public class RobarGoal extends Goal {
         return Vec3.atCenterOf(objetivo);
     }
 
+    /** Close enough AND it can actually see the container (no wall, window or floor in between). */
     private boolean alAlcance() {
-        return ratero.distanceToSqr(centro()) < 3.2 * 3.2;
+        return ratero.distanceToSqr(centro()) < 3.2 * 3.2 && puedeVer();
+    }
+
+    /**
+     * A straight line from its eyes to the container that only hits the container itself
+     * (or the other half of a double chest). Like a player, it cannot open a chest through a wall.
+     */
+    private boolean puedeVer() {
+        BlockHitResult hit = ratero.level().clip(new ClipContext(ratero.getEyePosition(), centro(),
+                ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, ratero));
+        if (hit.getType() == HitResult.Type.MISS) return true;
+        BlockPos p = hit.getBlockPos();
+        if (p.equals(objetivo)) return true;
+        return p.distManhattan(objetivo) == 1 && ratero.level().getBlockEntity(p) instanceof ChestBlockEntity;
     }
 
     @Override

@@ -2,6 +2,8 @@ package rateros.core;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -21,6 +23,13 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.Container;
+import net.minecraft.world.RandomizableContainer;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BedBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 import rateros.entidad.Ratero;
@@ -125,7 +134,7 @@ public final class Bandas {
             BlockPos p = donde;
             for (int k = 0; k < 6; k++) {
                 BlockPos q = superficie(level, donde.getX() + r.nextInt(5) - 2, donde.getZ() + r.nextInt(5) - 2);
-                if (sePuedeParar(level, q)) {
+                if (buenLugar(level, q)) {
                     p = q;
                     break;
                 }
@@ -163,6 +172,67 @@ public final class Bandas {
         return !level.getBlockState(suelo).getCollisionShape(level, suelo).isEmpty() && level.getFluidState(suelo).isEmpty();
     }
 
+    /**
+     * A good place for a bandit to appear: it can stand there, the ground is natural (not a roof, a floor or
+     * a farm) and it is not inside someone's base (no chests, furnaces or beds within 12 blocks).
+     * So walls around your land really keep them out: they have to get in from outside.
+     */
+    public static boolean buenLugar(ServerLevel level, BlockPos p) {
+        if (!sePuedeParar(level, p)) return false;
+        BlockState suelo = level.getBlockState(p.below());
+        boolean natural = suelo.is(BlockTags.DIRT) || suelo.is(BlockTags.SAND) || suelo.is(BlockTags.BASE_STONE_OVERWORLD)
+                || suelo.is(BlockTags.TERRACOTTA) || suelo.is(Blocks.GRAVEL) || suelo.is(Blocks.SNOW_BLOCK)
+                || suelo.is(Blocks.CLAY) || suelo.is(Blocks.SANDSTONE) || suelo.is(Blocks.RED_SANDSTONE);
+        return natural && !cercaDeUnaBase(level, p, 12) && !encerrado(level, p);
+    }
+
+    private static boolean esNatural(BlockState s) {
+        return s.is(BlockTags.DIRT) || s.is(BlockTags.SAND) || s.is(BlockTags.BASE_STONE_OVERWORLD) || s.is(BlockTags.TERRACOTTA)
+                || s.is(BlockTags.LOGS) || s.is(BlockTags.LEAVES) || s.is(Blocks.GRAVEL) || s.is(Blocks.SNOW_BLOCK)
+                || s.is(Blocks.CLAY) || s.is(Blocks.SANDSTONE) || s.is(Blocks.RED_SANDSTONE) || s.is(BlockTags.ICE);
+    }
+
+    /**
+     * Inside a walled area? Looks in 8 directions (up to 24 blocks) for a built wall: a column blocked at
+     * feet and head height, or a fence/wall, that is not natural terrain (hills and trees do not count).
+     * If 6 or more directions are walled off, the spot is inside your walls.
+     */
+    private static boolean encerrado(ServerLevel level, BlockPos p) {
+        int[][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}, {1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
+        int muros = 0;
+        for (int[] d : dirs) {
+            for (int k = 1; k <= 24; k++) {
+                BlockPos pie = p.offset(d[0] * k, 0, d[1] * k);
+                BlockPos cabeza = pie.above();
+                BlockState sp = level.getBlockState(pie), sc = level.getBlockState(cabeza);
+                VoxelShape forma = sp.getCollisionShape(level, pie);
+                // A fence or wall (taller than a block) also stops them
+                boolean cerca = !forma.isEmpty() && forma.max(Direction.Axis.Y) > 1.0;
+                boolean pared = !forma.isEmpty() && !sc.getCollisionShape(level, cabeza).isEmpty();
+                if (!cerca && !pared) continue;
+                if (!esNatural(cerca ? sp : sc)) muros++;
+                break;
+            }
+        }
+        return muros >= 6;
+    }
+
+    private static boolean cercaDeUnaBase(ServerLevel level, BlockPos p, int radio) {
+        for (int cx = (p.getX() - radio) >> 4; cx <= (p.getX() + radio) >> 4; cx++) {
+            for (int cz = (p.getZ() - radio) >> 4; cz <= (p.getZ() + radio) >> 4; cz++) {
+                if (!level.hasChunk(cx, cz)) continue;
+                for (BlockEntity be : level.getChunk(cx, cz).getBlockEntities().values()) {
+                    if (!(be instanceof Container) && !(be instanceof BedBlockEntity)) continue;
+                    if (be instanceof RandomizableContainer rc && rc.getLootTable() != null) continue;
+                    BlockPos q = be.getBlockPos();
+                    if (Math.abs(q.getX() - p.getX()) <= radio && Math.abs(q.getZ() - p.getZ()) <= radio
+                            && Math.abs(q.getY() - p.getY()) <= 8) return true;
+                }
+            }
+        }
+        return false;
+    }
+
     /** Surface position at x, z (on top of the ground, ignoring leaves). */
     private static BlockPos superficie(ServerLevel level, int x, int z) {
         return new BlockPos(x, level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z), z);
@@ -178,7 +248,7 @@ public final class Bandas {
             if (!level.hasChunk(x >> 4, z >> 4)) continue;
             BlockPos p = superficie(level, x, z);
             if (Math.abs(p.getY() - cerca.getY()) > 24) continue;
-            if (sePuedeParar(level, p)) return p;
+            if (buenLugar(level, p)) return p;
         }
         return null;
     }
