@@ -27,7 +27,6 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.world.Container;
 import net.minecraft.world.RandomizableContainer;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BedBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -222,7 +221,7 @@ public final class Bandas {
             for (int cz = (p.getZ() - radio) >> 4; cz <= (p.getZ() + radio) >> 4; cz++) {
                 if (!level.hasChunk(cx, cz)) continue;
                 for (BlockEntity be : level.getChunk(cx, cz).getBlockEntities().values()) {
-                    if (!(be instanceof Container) && !(be instanceof BedBlockEntity)) continue;
+                    if (!(be instanceof Container) && !be.getBlockState().is(BlockTags.BEDS)) continue;
                     if (be instanceof RandomizableContainer rc && rc.getLootTable() != null) continue;
                     BlockPos q = be.getBlockPos();
                     if (Math.abs(q.getX() - p.getX()) <= radio && Math.abs(q.getZ() - p.getZ()) <= radio
