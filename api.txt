@@ -1,0 +1,161 @@
+### net.minecraft.world.entity.ai.goal.FloatGoal
+Compiled from "FloatGoal.java"
+public class net.minecraft.world.entity.ai.goal.FloatGoal extends net.minecraft.world.entity.ai.goal.Goal {
+  public net.minecraft.world.entity.ai.goal.FloatGoal(net.minecraft.world.entity.Mob);
+  public boolean canUse();
+  public boolean requiresUpdateEveryTick();
+  public void tick();
+}
+### net.minecraft.world.entity.ai.goal.LookAtPlayerGoal
+Compiled from "LookAtPlayerGoal.java"
+public class net.minecraft.world.entity.ai.goal.LookAtPlayerGoal extends net.minecraft.world.entity.ai.goal.Goal {
+  public static final float DEFAULT_PROBABILITY;
+  protected final net.minecraft.world.entity.Mob mob;
+  protected net.minecraft.world.entity.Entity lookAt;
+  protected final float lookDistance;
+  protected final float probability;
+  protected final java.lang.Class<? extends net.minecraft.world.entity.LivingEntity> lookAtType;
+  protected final net.minecraft.world.entity.ai.targeting.TargetingConditions lookAtContext;
+  public net.minecraft.world.entity.ai.goal.LookAtPlayerGoal(net.minecraft.world.entity.Mob, java.lang.Class<? extends net.minecraft.world.entity.LivingEntity>, float);
+  public net.minecraft.world.entity.ai.goal.LookAtPlayerGoal(net.minecraft.world.entity.Mob, java.lang.Class<? extends net.minecraft.world.entity.LivingEntity>, float, float);
+  public net.minecraft.world.entity.ai.goal.LookAtPlayerGoal(net.minecraft.world.entity.Mob, java.lang.Class<? extends net.minecraft.world.entity.LivingEntity>, float, float, boolean);
+  public boolean canUse();
+  public boolean canContinueToUse();
+  public void start();
+  public void stop();
+  public void tick();
+}
+### net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal
+Compiled from "WaterAvoidingRandomStrollGoal.java"
+public class net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal extends net.minecraft.world.entity.ai.goal.RandomStrollGoal {
+  public static final float PROBABILITY;
+  protected final float probability;
+  public net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal(net.minecraft.world.entity.PathfinderMob, double);
+  public net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal(net.minecraft.world.entity.PathfinderMob, double, float);
+  protected net.minecraft.world.phys.Vec3 getPosition();
+}
+### net.minecraft.tags.EnchantmentTags
+Compiled from "EnchantmentTags.java"
+public interface net.minecraft.tags.EnchantmentTags {
+  public static final net.minecraft.tags.TagKey<net.minecraft.world.item.enchantment.Enchantment> TOOLTIP_ORDER;
+  public static final net.minecraft.tags.TagKey<net.minecraft.world.item.enchantment.Enchantment> ARMOR_EXCLUSIVE;
+  public static final net.minecraft.tags.TagKey<net.minecraft.world.item.enchantment.Enchantment> BOOTS_EXCLUSIVE;
+  public static final net.minecraft.tags.TagKey<net.minecraft.world.item.enchantment.Enchantment> BOW_EXCLUSIVE;
+  public static final net.minecraft.tags.TagKey<net.minecraft.world.item.enchantment.Enchantment> CROSSBOW_EXCLUSIVE;
+  public static final net.minecraft.tags.TagKey<net.minecraft.world.item.enchantment.Enchantment> DAMAGE_EXCLUSIVE;
+  public static final net.minecraft.tags.TagKey<net.minecraft.world.item.enchantment.Enchantment> MINING_EXCLUSIVE;
+  public static final net.minecraft.tags.TagKey<net.minecraft.world.item.enchantment.Enchantment> RIPTIDE_EXCLUSIVE;
+  public static final net.minecraft.tags.TagKey<net.minecraft.world.item.enchantment.Enchantment> TRADEABLE;
+  public static final net.minecraft.tags.TagKey<net.minecraft.world.item.enchantment.Enchantment> DOUBLE_TRADE_PRICE;
+  public static final net.minecraft.tags.TagKey<net.minecraft.world.item.enchantment.Enchantment> IN_ENCHANTING_TABLE;
+  public static final net.minecraft.tags.TagKey<net.minecraft.world.item.enchantment.Enchantment> ON_MOB_SPAWN_EQUIPMENT;
+  public static final net.minecraft.tags.TagKey<net.minecraft.world.item.enchantment.Enchantment> ON_TRADED_EQUIPMENT;
+  public static final net.minecraft.tags.TagKey<net.minecraft.world.item.enchantment.Enchantment> ON_RANDOM_LOOT;
+  public static final net.minecraft.tags.TagKey<net.minecraft.world.item.enchantment.Enchantment> CURSE;
+  public static final net.minecraft.tags.TagKey<net.minecraft.world.item.enchantment.Enchantment> SMELTS_LOOT;
+  public static final net.minecraft.tags.TagKey<net.minecraft.world.item.enchantment.Enchantment> PREVENTS_BEE_SPAWNS_WHEN_MINING;
+  public static final net.minecraft.tags.TagKey<net.minecraft.world.item.enchantment.Enchantment> PREVENTS_DECORATED_POT_SHATTERING;
+  public static final net.minecraft.tags.TagKey<net.minecraft.world.item.enchantment.Enchantment> PREVENTS_ICE_MELTING;
+  public static final net.minecraft.tags.TagKey<net.minecraft.world.item.enchantment.Enchantment> PREVENTS_INFESTED_SPAWNS;
+  public static final net.minecraft.tags.TagKey<net.minecraft.world.item.enchantment.Enchantment> TREASURE;
+  public static final net.minecraft.tags.TagKey<net.minecraft.world.item.enchantment.Enchantment> NON_TREASURE;
+  public static final net.minecraft.tags.TagKey<net.minecraft.world.item.enchantment.Enchantment> TRADES_DESERT_COMMON;
+  public static final net.minecraft.tags.TagKey<net.minecraft.world.item.enchantment.Enchantment> TRADES_JUNGLE_COMMON;
+  public static final net.minecraft.tags.TagKey<net.minecraft.world.item.enchantment.Enchantment> TRADES_PLAINS_COMMON;
+  public static final net.minecraft.tags.TagKey<net.minecraft.world.item.enchantment.Enchantment> TRADES_SAVANNA_COMMON;
+  public static final net.minecraft.tags.TagKey<net.minecraft.world.item.enchantment.Enchantment> TRADES_SNOW_COMMON;
+  public static final net.minecraft.tags.TagKey<net.minecraft.world.item.enchantment.Enchantment> TRADES_SWAMP_COMMON;
+  public static final net.minecraft.tags.TagKey<net.minecraft.world.item.enchantment.Enchantment> TRADES_TAIGA_COMMON;
+  static {};
+}
+### net.minecraft.world.level.LevelReader
+Compiled from "LevelReader.java"
+public interface net.minecraft.world.level.LevelReader extends net.minecraft.world.level.BlockAndLightGetter,net.minecraft.world.level.CollisionGetter,net.minecraft.world.level.SignalGetter,net.minecraft.world.level.biome.BiomeManager$NoiseBiomeSource {
+  public abstract net.minecraft.world.level.chunk.ChunkAccess getChunk(int, int, net.minecraft.world.level.chunk.status.ChunkStatus, boolean);
+  public abstract boolean hasChunk(int, int);
+  public abstract int getHeight(net.minecraft.world.level.levelgen.Heightmap$Types, int, int);
+  public default int getHeight(net.minecraft.world.level.levelgen.Heightmap$Types, net.minecraft.core.BlockPos);
+  public abstract int getSkyDarken();
+  public abstract net.minecraft.world.level.biome.BiomeManager getBiomeManager();
+  public default net.minecraft.core.Holder<net.minecraft.world.level.biome.Biome> getBiome(net.minecraft.core.BlockPos);
+  public default java.util.stream.Stream<net.minecraft.world.level.block.state.BlockState> getBlockStatesIfLoaded(net.minecraft.world.phys.AABB);
+  public default net.minecraft.core.Holder<net.minecraft.world.level.biome.Biome> getNoiseBiome(int, int, int);
+  public abstract net.minecraft.core.Holder<net.minecraft.world.level.biome.Biome> getUncachedNoiseBiome(int, int, int);
+  public abstract boolean isClientSide();
+  public abstract int getSeaLevel();
+  public abstract net.minecraft.world.level.dimension.DimensionType dimensionType();
+  public default int getMinY();
+  public default int getHeight();
+  public default net.minecraft.core.BlockPos getHeightmapPos(net.minecraft.world.level.levelgen.Heightmap$Types, net.minecraft.core.BlockPos);
+  public default boolean isEmptyBlock(net.minecraft.core.BlockPos);
+  public default boolean canSeeSkyFromBelowWater(net.minecraft.core.BlockPos);
+  public default float getPathfindingCostFromLightLevels(net.minecraft.core.BlockPos);
+  public default float getLightLevelDependentMagicValue(net.minecraft.core.BlockPos);
+  public default net.minecraft.world.level.chunk.ChunkAccess getChunk(net.minecraft.core.BlockPos);
+  public default net.minecraft.world.level.chunk.ChunkAccess getChunk(int, int);
+  public default net.minecraft.world.level.chunk.ChunkAccess getChunk(int, int, net.minecraft.world.level.chunk.status.ChunkStatus);
+  public default net.minecraft.world.level.BlockGetter getChunkForCollisions(int, int);
+  public default boolean isWaterAt(net.minecraft.core.BlockPos);
+  public default boolean containsAnyLiquid(net.minecraft.world.phys.AABB);
+  public default int getMaxLocalRawBrightness(net.minecraft.core.BlockPos);
+  public default int getMaxLocalRawBrightness(net.minecraft.core.BlockPos, int);
+  public default int getEffectiveSkyBrightness(net.minecraft.core.BlockPos);
+  public default boolean hasChunkAt(int, int);
+  public default boolean hasChunkAt(net.minecraft.core.BlockPos);
+  public default boolean hasChunksAt(net.minecraft.core.BlockPos, net.minecraft.core.BlockPos);
+  public default boolean hasChunksAt(int, int, int, int, int, int);
+  public default boolean hasChunksAt(int, int, int, int);
+  public abstract net.minecraft.core.RegistryAccess registryAccess();
+  public abstract net.minecraft.world.flag.FeatureFlagSet enabledFeatures();
+  public default <T> net.minecraft.core.HolderLookup<T> holderLookup(net.minecraft.resources.ResourceKey<? extends net.minecraft.core.Registry<? extends T>>);
+  public abstract net.minecraft.world.attribute.EnvironmentAttributeReader environmentAttributes();
+}
+### net.minecraft.world.level.EntityGetter
+Compiled from "EntityGetter.java"
+public interface net.minecraft.world.level.EntityGetter {
+  public abstract java.util.List<net.minecraft.world.entity.Entity> getEntities(net.minecraft.world.entity.Entity, net.minecraft.world.phys.AABB, java.util.function.Predicate<? super net.minecraft.world.entity.Entity>);
+  public abstract <T extends net.minecraft.world.entity.Entity> java.util.List<T> getEntities(net.minecraft.world.level.entity.EntityTypeTest<net.minecraft.world.entity.Entity, T>, net.minecraft.world.phys.AABB, java.util.function.Predicate<? super T>);
+  public default <T extends net.minecraft.world.entity.Entity> java.util.List<T> getEntitiesOfClass(java.lang.Class<T>, net.minecraft.world.phys.AABB, java.util.function.Predicate<? super T>);
+  public abstract java.util.List<? extends net.minecraft.world.entity.player.Player> players();
+  public default java.util.List<net.minecraft.world.entity.Entity> getEntities(net.minecraft.world.entity.Entity, net.minecraft.world.phys.AABB);
+  public default boolean isUnobstructed(net.minecraft.world.entity.Entity, net.minecraft.world.phys.shapes.VoxelShape);
+  public default <T extends net.minecraft.world.entity.Entity> java.util.List<T> getEntitiesOfClass(java.lang.Class<T>, net.minecraft.world.phys.AABB);
+  public default java.util.List<net.minecraft.world.phys.shapes.VoxelShape> getEntityCollisions(net.minecraft.world.entity.Entity, net.minecraft.world.phys.AABB);
+  public default net.minecraft.world.entity.player.Player getNearestPlayer(double, double, double, double, java.util.function.Predicate<net.minecraft.world.entity.Entity>);
+  public default net.minecraft.world.entity.player.Player getNearestPlayer(net.minecraft.world.entity.Entity, double);
+  public default net.minecraft.world.entity.player.Player getNearestPlayer(double, double, double, double, boolean);
+  public default boolean hasNearbyAlivePlayer(double, double, double, double);
+  public default net.minecraft.world.entity.player.Player getPlayerByUUID(java.util.UUID);
+}
+### net.minecraft.server.level.ServerPlayer$RespawnConfig
+Compiled from "ServerPlayer.java"
+public final class net.minecraft.server.level.ServerPlayer$RespawnConfig extends java.lang.Record {
+  public static final com.mojang.serialization.Codec<net.minecraft.server.level.ServerPlayer$RespawnConfig> CODEC;
+  public net.minecraft.server.level.ServerPlayer$RespawnConfig(net.minecraft.world.level.storage.LevelData$RespawnData, boolean);
+  public boolean isSamePosition(net.minecraft.server.level.ServerPlayer$RespawnConfig);
+  public final java.lang.String toString();
+  public final int hashCode();
+  public final boolean equals(java.lang.Object);
+  public net.minecraft.world.level.storage.LevelData$RespawnData respawnData();
+  public boolean forced();
+  static {};
+}
+### net.minecraft.world.level.storage.LevelData$RespawnData
+Compiled from "LevelData.java"
+public final class net.minecraft.world.level.storage.LevelData$RespawnData extends java.lang.Record {
+  public static final net.minecraft.world.level.storage.LevelData$RespawnData DEFAULT;
+  public static final com.mojang.serialization.MapCodec<net.minecraft.world.level.storage.LevelData$RespawnData> MAP_CODEC;
+  public static final com.mojang.serialization.Codec<net.minecraft.world.level.storage.LevelData$RespawnData> CODEC;
+  public static final net.minecraft.network.codec.StreamCodec<io.netty.buffer.ByteBuf, net.minecraft.world.level.storage.LevelData$RespawnData> STREAM_CODEC;
+  public net.minecraft.world.level.storage.LevelData$RespawnData(net.minecraft.core.GlobalPos, float, float);
+  public static net.minecraft.world.level.storage.LevelData$RespawnData of(net.minecraft.resources.ResourceKey<net.minecraft.world.level.Level>, net.minecraft.core.BlockPos, float, float);
+  public net.minecraft.resources.ResourceKey<net.minecraft.world.level.Level> dimension();
+  public net.minecraft.core.BlockPos pos();
+  public final java.lang.String toString();
+  public final int hashCode();
+  public final boolean equals(java.lang.Object);
+  public net.minecraft.core.GlobalPos globalPos();
+  public float yaw();
+  public float pitch();
+  static {};
+}
