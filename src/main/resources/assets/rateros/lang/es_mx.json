@@ -73,5 +73,13 @@
   "rateros.aj.buscarCama": "Buscan tu cama si no huelen nada",
   "rateros.aj.dano": "Daño de sus golpes (%)",
   "rateros.aj.ladronesHuyen": "Ladrones huyen si los cachas",
-  "rateros.desbandada": "¡La banda se desbanda y huye!"
+  "rateros.desbandada": "¡La banda se desbanda y huye!",
+  "rateros.pestana.lugar": "Dónde aparecen",
+  "rateros.aj.distancia": "Distancia a ti (mín / máx)",
+  "rateros.aj.evitarTechos": "Evitar techos (bloques abajo)",
+  "rateros.aj.evitarCultivos": "Evitar cultivos",
+  "rateros.aj.distanciaBase": "Distancia a tu base (0 = no)",
+  "rateros.aj.evitarCercados": "Evitar dentro de cercas",
+  "rateros.aj.cercas": "Cercas: alcance / direcciones",
+  "rateros.aj.lugar_ayuda": "La banda aparece a esa distancia de ti. No aparece sobre techos o pisos (si hay hueco abajo), sobre cultivos, cerca de tus cofres, hornos o camas (si pones una distancia) ni dentro de un terreno rodeado de cercas o muros (si en esa cantidad de direcciones, de 8, hay cerca dentro del alcance)."
 }

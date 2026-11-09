@@ -20,7 +20,7 @@ import java.util.function.Function;
 
 /** Settings screen (key Z). Every change is saved at once, like Minecraft's own options. */
 public class PantallaAjustes extends Screen {
-    private enum Pestana { GENERAL, BANDA, HURTO, ENTRADA }
+    private enum Pestana { GENERAL, BANDA, HURTO, ENTRADA, LUGAR }
 
     private static Pestana pestana = Pestana.GENERAL;
     private boolean cargado = false;
@@ -223,6 +223,23 @@ public class PantallaAjustes extends Screen {
                     avisoHasta = System.currentTimeMillis() + 2500;
                 }).bounds(izq + w2, height - 56, w2 - 2, 20).build());
             }
+            case LUGAR -> {
+                etiqueta(0, "rateros.aj.distancia");
+                numero(0, x, 40, "distanciaMin", 24, 1, true);
+                numero(0, x + 46, 40, "distanciaMax", 40, 1, true);
+                etiqueta(1, "rateros.aj.evitarTechos");
+                interruptor(1, x, 50, "evitarTechos", null);
+                numero(1, x + 56, 40, "revisarAbajo", 4, 1, true);
+                etiqueta(2, "rateros.aj.evitarCultivos");
+                interruptor(2, x, 50, "evitarCultivos", null);
+                etiqueta(3, "rateros.aj.distanciaBase");
+                numero(3, x, 40, "distanciaBase", 0, 1, true);
+                etiqueta(4, "rateros.aj.evitarCercados");
+                interruptor(4, x, 50, "evitarCercados", null);
+                etiqueta(5, "rateros.aj.cercas");
+                numero(5, x, 40, "alcanceCercas", 24, 1, true);
+                numero(5, x + 46, 40, "direccionesCercas", 6, 1, true);
+            }
         }
     }
 
@@ -256,6 +273,7 @@ public class PantallaAjustes extends Screen {
                 g.textWithWordWrap(font, gris.apply("rateros.aj.hurto_ayuda"), izq, fila(6) + 2, der - izq, -1);
             }
             case ENTRADA -> g.textWithWordWrap(font, gris.apply("rateros.aj.listas_ayuda"), izq, fila(3) + 6, der - izq, -1);
+            case LUGAR -> g.textWithWordWrap(font, gris.apply("rateros.aj.lugar_ayuda"), izq, fila(6) + 6, der - izq, -1);
         }
         if (aviso != null && System.currentTimeMillis() < avisoHasta) {
             g.centeredText(font, aviso.copy().withStyle(ChatFormatting.YELLOW), width / 2, height - 14, -1);

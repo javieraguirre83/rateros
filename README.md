@@ -4,7 +4,7 @@ Bandas de **rateros** que buscan y roban tus **cosas ya trabajadas**: lingotes, 
 
 ## ⬇️ Descargar
 
-**[Descargar el mod (.jar)](https://github.com/javieraguirre83/rateros/releases/download/ultima/Rateros-1.1.6-forge-26.2.jar)**
+**[Descargar el mod (.jar)](https://github.com/javieraguirre83/rateros/releases/download/ultima/Rateros-1.1.7-forge-26.2.jar)**
 
 1. Descarga el archivo `.jar`.
 2. Abre la carpeta `mods`:
@@ -23,7 +23,13 @@ Los textos salen en **español o inglés** según el idioma de tu Minecraft. El 
 - Al inicio del mundo, más o menos **1 de cada 5 días**; con los días va subiendo hasta **1 de cada 2** (día 60 en adelante).
 - Al llegar suena un **cuerno** y sale el aviso **"¡Se acercan rateros!"**.
 - Llega una banda a la vez, a unos 24-40 bloques de ti. No llegan en dificultad Pacífica ni fuera del mundo normal.
-- **Siempre llegan desde afuera:** aparecen sobre terreno natural (no en techos, pisos ni cultivos), nunca a menos de 12 bloques de cofres, hornos o camas, y nunca dentro de un área rodeada de muros o cercas. Si amurallas tu terreno, tienen que entrar por fuera.
+- **Dónde aparecen** (todo se ajusta en la pestaña **Dónde aparecen** de la pantalla Z):
+  - A **24-40 bloques de ti**.
+  - **No sobre techos ni pisos:** si debajo del lugar hay un hueco (unos 4 bloques hacia abajo), es una casa o un puente y buscan otro lugar.
+  - **No sobre cultivos** (tierra de cultivo).
+  - **No dentro de un terreno cercado:** si el lugar está rodeado de **cercas, muros o puertas de cerca** (en 6 de 8 direcciones, a menos de 24 bloques), buscan otro lugar afuera. Las paredes de bloques normales no cuentan (no se distinguen de un cerro).
+  - **Distancia a tu base:** si la activas, no aparecen a menos de esa distancia de tus cofres, hornos o camas. De fábrica está apagada (0).
+  - Funciona con cualquier tipo de terreno; si no encuentran un lugar válido, esa vez no llega la banda.
 
 **La banda: según lo mejor que hayas conseguido**
 

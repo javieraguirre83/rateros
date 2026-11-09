@@ -73,5 +73,13 @@
   "rateros.aj.buscarCama": "Find your bed if they smell nothing",
   "rateros.aj.dano": "Damage (%)",
   "rateros.aj.ladronesHuyen": "Thieves run if caught",
-  "rateros.desbandada": "The gang breaks up and runs!"
+  "rateros.desbandada": "The gang breaks up and runs!",
+  "rateros.pestana.lugar": "Where they appear",
+  "rateros.aj.distancia": "Distance to you (min / max)",
+  "rateros.aj.evitarTechos": "Avoid roofs (blocks below)",
+  "rateros.aj.evitarCultivos": "Avoid farmland",
+  "rateros.aj.distanciaBase": "Distance to your base (0 = off)",
+  "rateros.aj.evitarCercados": "Avoid inside fences",
+  "rateros.aj.cercas": "Fences: reach / directions",
+  "rateros.aj.lugar_ayuda": "The gang appears at that distance from you. Not on roofs or floors (empty space below), on farmland, near your chests, furnaces or beds (if a distance is set) or inside land closed by fences or walls (if that many of 8 directions have one within reach)."
 }

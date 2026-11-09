@@ -36,6 +36,20 @@ public final class Ajustes {
     public static boolean asaltarAldeas = true;
     /** Radius (blocks) in which they sniff out loot. */
     public static int radioOlfato = 96;
+
+    // ---------- where gangs appear ----------
+    /** How far from you a gang appears (blocks). */
+    public static int distanciaMin = 24, distanciaMax = 40;
+    /** Not on roofs or floors: looks this many blocks down for an empty space. */
+    public static boolean evitarTechos = true;
+    public static int revisarAbajo = 4;
+    /** Not on farmland. */
+    public static boolean evitarCultivos = true;
+    /** Minimum distance (blocks) to your chests, furnaces and beds. 0 = off. */
+    public static int distanciaBase = 0;
+    /** Not inside an area closed by fences or walls. */
+    public static boolean evitarCercados = true;
+    public static int alcanceCercas = 24, direccionesCercas = 6;
     /** If they smell nothing, they walk to the bed (respawn point) of the nearest player and sniff there. */
     public static boolean buscarCama = true;
 
@@ -253,6 +267,15 @@ public final class Ajustes {
         j.addProperty("aviso", aviso);
         j.addProperty("asaltarAldeas", asaltarAldeas);
         j.addProperty("radioOlfato", radioOlfato);
+        j.addProperty("distanciaMin", distanciaMin);
+        j.addProperty("distanciaMax", distanciaMax);
+        j.addProperty("evitarTechos", evitarTechos);
+        j.addProperty("revisarAbajo", revisarAbajo);
+        j.addProperty("evitarCultivos", evitarCultivos);
+        j.addProperty("distanciaBase", distanciaBase);
+        j.addProperty("evitarCercados", evitarCercados);
+        j.addProperty("alcanceCercas", alcanceCercas);
+        j.addProperty("direccionesCercas", direccionesCercas);
         j.addProperty("buscarCama", buscarCama);
         j.addProperty("maxBanda", maxBanda);
         j.addProperty("rolLadron", rolLadron);
@@ -327,6 +350,15 @@ public final class Ajustes {
         aviso = bool(j, "aviso", aviso);
         asaltarAldeas = bool(j, "asaltarAldeas", asaltarAldeas);
         radioOlfato = entero(j, "radioOlfato", radioOlfato, 8, 192);
+        distanciaMin = entero(j, "distanciaMin", distanciaMin, 4, 128);
+        distanciaMax = entero(j, "distanciaMax", distanciaMax, distanciaMin, 160);
+        evitarTechos = bool(j, "evitarTechos", evitarTechos);
+        revisarAbajo = entero(j, "revisarAbajo", revisarAbajo, 1, 16);
+        evitarCultivos = bool(j, "evitarCultivos", evitarCultivos);
+        distanciaBase = entero(j, "distanciaBase", distanciaBase, 0, 64);
+        evitarCercados = bool(j, "evitarCercados", evitarCercados);
+        alcanceCercas = entero(j, "alcanceCercas", alcanceCercas, 4, 64);
+        direccionesCercas = entero(j, "direccionesCercas", direccionesCercas, 1, 8);
         buscarCama = bool(j, "buscarCama", buscarCama);
         maxBanda = entero(j, "maxBanda", maxBanda, 1, 32);
         rolLadron = bool(j, "rolLadron", rolLadron);
